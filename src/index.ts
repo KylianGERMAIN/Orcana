@@ -4,7 +4,7 @@ import express from 'express'
 import http from 'http'
 import mongoose  from 'mongoose';
 import { typeDefs } from './typeDefs/typeDef';
-import { resolvers } from './resolver/UserResolver';
+import { resolvers } from "./resolvers/resolver";
 
 
 const dotenv = require('dotenv');
