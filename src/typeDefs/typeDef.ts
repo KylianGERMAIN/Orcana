@@ -1,9 +1,9 @@
 import { gql } from 'apollo-server-express';
 
 export const typeDefs = gql`
-  type Item {
+  type Data {
     email: String
-    name: String
+    username: String
     password: String
   }
 
@@ -11,17 +11,24 @@ export const typeDefs = gql`
     message: String
   }
 
-  type ItemResponse {
-    item: Item
+  type RegisterResponse {
+    # data: Data
+    refreshToken: String
+    accessToken: String
+    expires_in: String
+    tokenType: String
     error: Error
   }
 
   type Query {
     defaultPost: String
-    getItems: [Item]
   }
 
   type Mutation {
-    register(email: String, name: String, password: String): ItemResponse
+    register(
+      email: String
+      username: String
+      password: String
+    ): RegisterResponse
   }
 `;

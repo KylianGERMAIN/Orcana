@@ -14,7 +14,7 @@ dotenv.config()
 async function listen(port: number) {
   const app = express()
 
-  var uri = `mongodb+srv://Kylian_Germain:${process.env.PASSWORD_DB}@cluster0.kzymlgf.mongodb.net/Orcana?retryWrites=true&w=majority`;
+  var uri = process.env.LINK_DB;
 
   //@ts-ignore
   mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true })

@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema(
+export const UserSchema = new Schema(
   {
     email: {
       type: String,
       required: true,
     },
-    name: {
+    username: {
       type: String,
       required: true,
     },

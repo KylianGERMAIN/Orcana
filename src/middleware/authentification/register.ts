@@ -1,10 +1,10 @@
+import { Encrypt, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
+import { User } from "../../helpers/interface/userInterface";
 import { UserModel } from "../../helpers/models/userModel";
-import { login } from "../../helpers/validator/Indentification";
+import { registerParsing } from "../../helpers/validator/Indentification";
 
-export async function register({ email, name, password }: any) {
-  console.log(email);
-  let item = {};
+export async function register({ email, username, password }: any) {
   let _error: ErrorResponse = {
     message: "",
     extensions: {
@@ -13,18 +13,37 @@ export async function register({ email, name, password }: any) {
       field: "",
     },
   };
+  let user: User = {
+    email: "",
+    username: "",
+    password: "",
+  };
+  let accesToken: string = "";
+  let refreshToken: string = "";
 
   try {
-    login(email, name, password);
-    const newItem = await new UserModel({ email, name, password });
-    item = await newItem.save();
-    console.log("item  ==== ", item);
+    user = {
+      email: email,
+      username: username,
+      password: password,
+    };
+    await registerParsing(user);
+    user.password = await Encrypt.cryptPassword(password);
+    await new UserModel({
+      email: user.email,
+      username: user.username,
+      password: user.password,
+    });
+    accesToken = await Token.generateAccessToken(user);
+    refreshToken = await Token.generateRefreshToken(user);
   } catch (e: any) {
-    console.log(e);
     _error = e;
   }
   return {
-    item: item,
     error: _error,
+    refreshToken: refreshToken,
+    accessToken: accesToken,
+    expires_in: "1800s",
+    tokenType: "Bearer",
   };
 }
