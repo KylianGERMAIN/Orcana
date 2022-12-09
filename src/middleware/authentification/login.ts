@@ -2,9 +2,9 @@ import { Encrypt, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { User } from "../../helpers/interface/userInterface";
 import { UserModel } from "../../helpers/models/userModel";
-import { registerChecking } from "../../helpers/validator/Indentification";
+import { loginChecking } from "../../helpers/validator/Indentification";
 
-export async function register({ email, username, password }: any) {
+export async function login({ email, password }: any) {
   let _error: ErrorResponse = {
     message: "",
     extensions: {
@@ -24,17 +24,11 @@ export async function register({ email, username, password }: any) {
   try {
     user = {
       email: email,
-      username: username,
+      username: "",
       password: password,
     };
-    await registerChecking(user);
+    await loginChecking(user);
     user.password = await Encrypt.cryptPassword(password);
-    const newUser = await new UserModel({
-      email: user.email,
-      username: user.username,
-      password: user.password,
-    });
-    await newUser.save();
     accesToken = await Token.generateAccessToken(user);
     refreshToken = await Token.generateRefreshToken(user);
   } catch (e: any) {
