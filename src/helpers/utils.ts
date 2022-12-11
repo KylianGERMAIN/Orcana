@@ -34,7 +34,7 @@ export const Token = {
       }
     );
   },
-  decodeRefreshToken: async (token: string) => {
+  decodeRefreshToken: async (token: string, key: string) => {
     var token_section = token.split(" ");
     if (token_section.length != 2 || token_section[0] != "Bearer") {
       throw new GraphQLError("Your authorization bearer token is not valid", {
@@ -45,12 +45,7 @@ export const Token = {
         },
       });
     } else {
-      if (
-        jsonwebtoken.verify(
-          token_section[1],
-          process.env.REFRESH_TOKEN_SECRET as string
-        )
-      ) {
+      if (jsonwebtoken.verify(token_section[1], key as string)) {
         const decodedToken = jsonwebtoken.decode(token_section[1], {
           complete: true,
         });

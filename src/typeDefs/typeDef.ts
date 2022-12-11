@@ -5,6 +5,10 @@ export const typeDefs = gql`
     message: String
   }
 
+  type BasicResponse {
+    error: Error
+  }
+
   type AuthResponse {
     refreshToken: String
     accessToken: String
@@ -28,5 +32,6 @@ export const typeDefs = gql`
   type Mutation {
     register(email: String, username: String, password: String): AuthResponse
     login(email: String, password: String): AuthResponse
+    resetPassword(newPassword: String): BasicResponse
   }
 `;

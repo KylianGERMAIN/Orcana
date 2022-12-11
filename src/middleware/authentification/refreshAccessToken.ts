@@ -2,7 +2,7 @@ import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { Token } from "../../helpers/utils";
 
-export async function refreshAccessToken(authorization: any) {
+export async function refreshAccessToken(authorization: string) {
   let user: User = {
     email: "",
     username: "",
@@ -20,7 +20,10 @@ export async function refreshAccessToken(authorization: any) {
   let newToken: string = "";
 
   try {
-    var token: JWT = (await Token.decodeRefreshToken(authorization)) as JWT;
+    var token: JWT = (await Token.decodeRefreshToken(
+      authorization,
+      process.env.REFRESH_TOKEN_SECRET as string
+    )) as JWT;
     if (token) {
       user.email = token.payload.email;
       newToken = await Token.generateAccessToken(user);
