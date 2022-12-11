@@ -13,8 +13,16 @@ export const typeDefs = gql`
     error: Error
   }
 
+  type RefreshAccessTokenResponse {
+    accessToken: String
+    expires_in: String
+    tokenType: String
+    error: Error
+  }
+
   type Query {
     defaultPost: String
+    refreshAccessToken: RefreshAccessTokenResponse
   }
 
   type Mutation {
