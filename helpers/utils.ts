@@ -35,6 +35,15 @@ export const Token = {
     );
   },
   decodeRefreshToken: async (token: string, key: string) => {
+    if (token == undefined) {
+      throw new GraphQLError("No authorization", {
+        extensions: {
+          status: StatusCodes.FORBIDDEN,
+          error: ReasonPhrases.FORBIDDEN,
+          field: "Authorization",
+        },
+      });
+    }
     var token_section = token.split(" ");
     if (token_section.length != 2 || token_section[0] != "Bearer") {
       throw new GraphQLError("Your authorization bearer token is not valid", {
