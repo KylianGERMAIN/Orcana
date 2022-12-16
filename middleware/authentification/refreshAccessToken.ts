@@ -7,6 +7,8 @@ export async function refreshAccessToken(authorization: string) {
     email: "",
     username: "",
     password: "",
+    role: "",
+    id: "",
   };
   let _error: ErrorResponse = {
     message: "",

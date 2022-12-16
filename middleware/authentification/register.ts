@@ -17,15 +17,19 @@ export async function register({ email, username, password }: any) {
     email: "",
     username: "",
     password: "",
+    role: "",
+    id: "",
   };
   let accesToken: string = "";
   let refreshToken: string = "";
 
   try {
     user = {
+      id: "",
       email: email,
       username: username,
       password: password,
+      role: "user",
     };
     await registerChecking(user);
     user.password = await Encrypt.cryptPassword(password);
@@ -33,6 +37,7 @@ export async function register({ email, username, password }: any) {
       email: user.email,
       username: user.username,
       password: user.password,
+      role: user.role,
     });
     await newUser.save();
     accesToken = await Token.generateAccessToken(user);

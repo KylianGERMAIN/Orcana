@@ -17,15 +17,19 @@ export async function login({ email, password }: any) {
     email: "",
     username: "",
     password: "",
+    role: "",
+    id: "",
   };
   let accesToken: string = "";
   let refreshToken: string = "";
 
   try {
     user = {
+      id: "",
       email: email,
       username: "",
       password: password,
+      role: "user",
     };
     await loginChecking(user);
     user.password = await Encrypt.cryptPassword(password);

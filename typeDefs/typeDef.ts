@@ -32,6 +32,8 @@ export const typeDefs = gql`
   type Mutation {
     register(email: String, username: String, password: String): AuthResponse
     login(email: String, password: String): AuthResponse
+
     resetPassword(newPassword: String): BasicResponse
+    setRole(user_id: String, role: String): BasicResponse
   }
 `;

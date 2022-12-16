@@ -1,7 +1,10 @@
 import { GraphQLError } from "graphql";
 import { ReasonPhrases } from "http-status-codes/build/cjs/reason-phrases";
 import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
-import { findUser, updateUser } from "../../helpers/database/userRequest";
+import {
+  findUserWithEmail,
+  updateUser,
+} from "../../helpers/database/userRequest";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { Encrypt, Token } from "../../helpers/utils";
@@ -14,6 +17,8 @@ export async function resetPassword(
     email: "",
     username: "",
     password: "",
+    role: "",
+    id: "",
   };
   let _error: ErrorResponse = {
     message: "",
@@ -30,8 +35,7 @@ export async function resetPassword(
     )) as JWT;
     if (token) {
       user.email = token.payload.email;
-      const res: any = await findUser(user);
-      console.log(await Encrypt.comparePassword(newPassword, res.password));
+      const res: any = await findUserWithEmail(user);
       if (await Encrypt.comparePassword(newPassword, res.password)) {
         throw new GraphQLError(
           "You change the password with the same password",
