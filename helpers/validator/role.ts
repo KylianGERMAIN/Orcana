@@ -25,7 +25,7 @@ export async function compareRole(userRole: string, newRole: string) {
       extensions: {
         status: StatusCodes.FORBIDDEN,
         error: ReasonPhrases.FORBIDDEN,
-        field: "password",
+        field: "role",
       },
     });
   }

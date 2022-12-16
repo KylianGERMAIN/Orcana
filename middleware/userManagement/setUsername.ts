@@ -31,7 +31,7 @@ export async function setUsername(authorization: string, name: string) {
         extensions: {
           status: StatusCodes.FORBIDDEN,
           error: ReasonPhrases.FORBIDDEN,
-          field: "password",
+          field: "username",
         },
       });
     }
