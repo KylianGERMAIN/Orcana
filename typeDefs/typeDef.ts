@@ -35,5 +35,6 @@ export const typeDefs = gql`
 
     resetPassword(newPassword: String): BasicResponse
     setRole(user_id: String, role: String): BasicResponse
+    setUsername(username: String): BasicResponse
   }
 `;
