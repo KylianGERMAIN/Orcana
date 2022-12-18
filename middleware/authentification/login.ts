@@ -31,7 +31,8 @@ export async function login({ email, password }: any) {
       password: password,
       role: "user",
     };
-    await loginChecking(user);
+    const result = await loginChecking(user);
+    user.id = result._id.toString();
     user.password = await Encrypt.cryptPassword(password);
     accesToken = await Token.generateAccessToken(user);
     refreshToken = await Token.generateRefreshToken(user);

@@ -18,7 +18,7 @@ export const Encrypt = {
 export const Token = {
   generateAccessToken: async (user: User) => {
     return await jsonwebtoken.sign(
-      { email: user.email },
+      { id: user.id },
       process.env.ACCESS_TOKEN_SECRET as string,
       {
         expiresIn: "1800s",
@@ -27,7 +27,7 @@ export const Token = {
   },
   generateRefreshToken: async (user: User) => {
     return await jsonwebtoken.sign(
-      { email: user.email },
+      { id: user.id },
       process.env.REFRESH_TOKEN_SECRET as string,
       {
         expiresIn: "2y",

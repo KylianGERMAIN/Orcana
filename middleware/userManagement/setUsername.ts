@@ -40,9 +40,9 @@ export async function setUsername(authorization: string, name: string) {
       process.env.ACCESS_TOKEN_SECRET as string
     )) as JWT;
     if (token) {
-      user.email = token.payload.email;
-      const res: any = await findUserWithEmail(user);
-      await updateUser({ email: res.email }, { username: name });
+      user.id = token.payload.id;
+      const res: any = await findUserWithId(user);
+      await updateUser({ id: res.id }, { username: name });
     }
   } catch (e: any) {
     _error = e;

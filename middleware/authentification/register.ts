@@ -3,6 +3,7 @@ import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { User } from "../../helpers/interface/userInterface";
 import { UserModel } from "../../helpers/models/userModel";
 import { registerChecking } from "../../helpers/validator/Indentification";
+import { findUserWithEmail } from "../../helpers/database/userRequest";
 
 export async function register({ email, username, password }: any) {
   let _error: ErrorResponse = {
@@ -40,6 +41,8 @@ export async function register({ email, username, password }: any) {
       role: user.role,
     });
     await newUser.save();
+    const res: any = await findUserWithEmail(user);
+    user.id = res._id.toString();
     accesToken = await Token.generateAccessToken(user);
     refreshToken = await Token.generateRefreshToken(user);
   } catch (e: any) {

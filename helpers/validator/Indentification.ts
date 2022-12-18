@@ -92,4 +92,5 @@ export async function loginChecking(user: User) {
       },
     });
   }
+  return res;
 }

@@ -37,9 +37,8 @@ export async function setRole(authorization: string, id: string, role: string) {
       process.env.ACCESS_TOKEN_SECRET as string
     )) as JWT;
     if (token) {
-      user.email = token.payload.email;
-      const userIn: any = await findUserWithEmail(user);
-      user.id = userIn._id.toString();
+      user.id = token.payload.id;
+      const userIn: any = await findUserWithId(user);
       user.role = userIn.role;
       const userOut: any = await findUserWithId(toUser);
       toUser.email = userOut.email;

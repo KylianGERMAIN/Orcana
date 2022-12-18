@@ -27,7 +27,7 @@ export async function refreshAccessToken(authorization: string) {
       process.env.REFRESH_TOKEN_SECRET as string
     )) as JWT;
     if (token) {
-      user.email = token.payload.email;
+      user.id = token.payload.id;
       newToken = await Token.generateAccessToken(user);
     }
   } catch (e: any) {
