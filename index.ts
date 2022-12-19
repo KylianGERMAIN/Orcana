@@ -9,6 +9,7 @@ dotenv.config();
 
 async function listen(port: number) {
   const app = express();
+  app.set("trust proxy", true);
 
   var uri = process.env.LINK_DB;
 
@@ -29,7 +30,7 @@ async function listen(port: number) {
     resolvers,
     context: ({ req }) => {
       if (req.headers && req.headers.authorization) {
-        return req.headers;
+        return req;
       }
     },
   });
