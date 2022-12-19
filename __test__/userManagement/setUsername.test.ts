@@ -14,7 +14,7 @@ const mutation = `mutation Mutation($username: String) {
 dotenv.config({ path: `.env.test` });
 
 describe("set Username", () => {
-  test("Success", async () => {
+  test("Success", () => {
     return fetch("http://localhost:4000/graphql", {
       method: "POST",
       headers: {
@@ -37,7 +37,7 @@ describe("set Username", () => {
       });
   });
 
-  test("username not exist", async () => {
+  test("username not exist", () => {
     return fetch("http://localhost:4000/graphql", {
       method: "POST",
       headers: {
@@ -60,7 +60,7 @@ describe("set Username", () => {
       });
   });
 
-  test("username too short", async () => {
+  test("username too short", () => {
     return fetch("http://localhost:4000/graphql", {
       method: "POST",
       headers: {

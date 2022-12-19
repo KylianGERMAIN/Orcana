@@ -1,6 +1,7 @@
 import { resetPassword } from "../middleware/userManagement/resetPassword";
 import { setUsername } from "../middleware/userManagement/setUsername";
 import { setRole } from "../middleware/userManagement/setRole";
+import { deleteAccount } from "../middleware/userManagement/deleteAccount";
 
 export const UserManagementMutation = {
   resetPassword: async (parent: any, { newPassword }: any, context: any) =>
@@ -11,4 +12,7 @@ export const UserManagementMutation = {
     setUsername(context.authorization, username),
 };
 
-export const UserManagementQuery = {};
+export const UserManagementQuery = {
+  deleteAccount: async (parent: any, {}: any, context: any) =>
+    deleteAccount(context.authorization),
+};

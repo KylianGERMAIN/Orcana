@@ -4,6 +4,7 @@ import { UserSchema } from "../models/userModel";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { User } from "../interface/userInterface";
 
+
 export async function findUserWithEmail(user: User) {
   const UserModel = mongoose.model("users", UserSchema);
   const res = await UserModel.findOne({ email: user.email }).clone();
@@ -47,6 +48,20 @@ export async function updateUser(filter: object, update: object) {
           },
         }
       );
+    }
+  }).clone();
+}
+
+export async function deleteUser(filter: object) {
+  const UserModel = mongoose.model("users", UserSchema);
+  await UserModel.deleteOne(filter, function (err: any) {
+    if (err) {
+      throw new GraphQLError("An error when deleting an user in the database", {
+        extensions: {
+          status: StatusCodes.INTERNAL_SERVER_ERROR,
+          error: ReasonPhrases.INTERNAL_SERVER_ERROR,
+        },
+      });
     }
   }).clone();
 }

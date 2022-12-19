@@ -17,7 +17,7 @@ const query = `query Query {
 dotenv.config({ path: `.env.test` });
 
 describe("RefreshAccesToken", () => {
-  test("Success", async () => {
+  test("Success", () => {
     return fetch("http://localhost:4000/graphql", {
       method: "POST",
       headers: {
@@ -37,7 +37,7 @@ describe("RefreshAccesToken", () => {
       });
   });
 
-  test("No Authorization", async () => {
+  test("No Authorization", () => {
     return fetch("http://localhost:4000/graphql", {
       method: "POST",
       headers: {
@@ -56,7 +56,7 @@ describe("RefreshAccesToken", () => {
       });
   });
 
-  test("no Bearer", async () => {
+  test("no Bearer", () => {
     return fetch("http://localhost:4000/graphql", {
       method: "POST",
       headers: {

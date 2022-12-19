@@ -26,7 +26,10 @@ export const typeDefs = gql`
 
   type Query {
     defaultPost: String
+
     refreshAccessToken: RefreshAccessTokenResponse
+
+    deleteAccount: BasicResponse
   }
 
   type Mutation {

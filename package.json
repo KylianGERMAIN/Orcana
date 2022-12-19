@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "nodemon --watch './**/*.{ts,graphql}' --exec 'node --experimental-specifier-resolution=node --loader ts-node/esm' ./index.ts",
     "dev": "tsc-watch --onSuccess \"npm run watch\"",
-    "test": "jest"
+    "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "keywords": [],
   "author": "",

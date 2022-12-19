@@ -14,7 +14,7 @@ const mutation = `mutation SetRole($user_id: String, $role: String) {
 dotenv.config({ path: `.env.test` });
 
 describe("set Role", () => {
-  test("Success", async () => {
+  test("Success", () => {
     return fetch("http://localhost:4000/graphql", {
       method: "POST",
       headers: {
@@ -38,7 +38,7 @@ describe("set Role", () => {
       });
   });
 
-  test("role not existe", async () => {
+  test("role not existe", () => {
     return fetch("http://localhost:4000/graphql", {
       method: "POST",
       headers: {
