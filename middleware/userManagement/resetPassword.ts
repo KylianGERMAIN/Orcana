@@ -5,11 +5,10 @@ import { findUserWithId, updateUser } from "../../helpers/database/userRequest";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { Encrypt, Token } from "../../helpers/utils";
+import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
+import { setLog } from "../log/setLog";
 
-export async function resetPassword(
-  authorization: string,
-  newPassword: string
-) {
+export async function resetPassword(context: any, newPassword: string) {
   let user: User = {
     email: "",
     username: "",
@@ -25,9 +24,24 @@ export async function resetPassword(
       field: "",
     },
   };
+
+  let http_info: HttpInfo = {
+    status: "200",
+    url: context.originalUrl ? context.originalUrl : "",
+    ip: "",
+    method: context.method ? context.method : "",
+  };
+
+  let query: QueryContent = {
+    operationName: context.body.operationName ? context.body.operationName : "",
+    query: context.body.query ? context.body.query : "",
+  };
+
+  var time = new Date();
+
   try {
     var token: JWT = (await Token.decodeRefreshToken(
-      authorization,
+      context.headers.authorization,
       process.env.ACCESS_TOKEN_SECRET as string
     )) as JWT;
     if (token) {
@@ -47,10 +61,12 @@ export async function resetPassword(
       } else {
         user.password = await Encrypt.cryptPassword(newPassword);
         await updateUser({ id: user.id }, { password: user.password });
+        setLog(time, user.id, "info", _error, query, http_info);
       }
     }
   } catch (e: any) {
     _error = e;
+    setLog(time, user.id, "error", _error, query, http_info);
   }
   return {
     error: _error,
