@@ -10,7 +10,7 @@ export async function setLog(
   query: QueryContent,
   http_info: HttpInfo
 ) {
-  var end: any = new Date().getTime() - time.getTime();
+  const end: any = new Date().getTime() - time.getTime();
   const log = await new LogModel({
     timestamp: new Date().toISOString(),
     user_id: user_id,

@@ -1,4 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
+import { CustomErrorMessage } from "../../helpers/Error/error";
 
 const dotenv = require("dotenv");
 const fetch = require("node-fetch");
@@ -59,7 +60,7 @@ describe("set Role", () => {
       })
       .then((res: any) => {
         expect(res.errors[0].message).toMatch(
-          "You cannot assign this role to this user"
+            CustomErrorMessage.CANT_ASSIGN_ROLE
         );
       });
   });

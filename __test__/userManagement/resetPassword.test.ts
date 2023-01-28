@@ -1,7 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 
-const dotenv = require("dotenv");
-const fetch = require("node-fetch");
+import dotenv from "dotenv";
+import fetch from "node-fetch";
 
 const query = `mutation Mutation($newPassword: String) {
   resetPassword(newPassword: $newPassword) {

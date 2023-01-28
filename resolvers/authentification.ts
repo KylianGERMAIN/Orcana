@@ -4,16 +4,16 @@ import { refreshAccessToken } from "../middleware/authentification/refreshAccess
 import { register } from "../middleware/authentification/register";
 
 export const AuthMutation = {
-  register: async (
-    parent: any,
-    { email, username, password }: User,
-    context: any
-  ) => register({ email, username, password }, context),
-  login: async (parent: any, { email, password }: User, context: any) =>
-    login(email, password, context),
+    register: async (
+        parent: never,
+        { email, username, password }: User,
+        context: any
+    ) => register({ email, username, password }, context),
+    login: async (parent: never, { email, password }: User, context: any) =>
+        login(email, password, context),
 };
 
 export const AuthQuery = {
-  refreshAccessToken: async (parent: any, {}, context: any) =>
-    refreshAccessToken(context),
+    refreshAccessToken: async (parent: never, values: never, context: any) =>
+        refreshAccessToken(context),
 };

@@ -4,15 +4,15 @@ import { setRole } from "../middleware/userManagement/setRole";
 import { deleteAccount } from "../middleware/userManagement/deleteAccount";
 
 export const UserManagementMutation = {
-  resetPassword: async (parent: any, { newPassword }: any, context: any) =>
-    resetPassword(context, newPassword),
-  setRole: async (parent: any, { user_id, role }: any, context: any) =>
-    setRole(context, user_id, role),
-  setUsername: async (parent: any, { username }: any, context: any) =>
-    setUsername(context, username),
+    resetPassword: async (parent: never, { newPassword }: any, context: any) =>
+        resetPassword(context, newPassword),
+    setRole: async (parent: never, { user_id, role }: any, context: any) =>
+        setRole(context, user_id, role),
+    setUsername: async (parent: never, { username }: any, context: any) =>
+        setUsername(context, username),
 };
 
 export const UserManagementQuery = {
-  deleteAccount: async (parent: any, {}: any, context: any) =>
-    deleteAccount(context),
+    deleteAccount: async (parent: never, values: never, context: any) =>
+        deleteAccount(context),
 };
