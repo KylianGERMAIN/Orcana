@@ -16,6 +16,14 @@ export const Encrypt = {
         bcrypt.compare(password, hashPassword).then((resp) => resp),
 };
 
+export const RequestContext = {
+    checkOperationName: (operationName: string) => {
+        if (operationName == undefined) {
+            throw new Error("No operationName");
+        }
+    },
+};
+
 export const Token = {
     generateAccessToken: async (user: User) => {
         return await jsonwebtoken.sign(
@@ -45,7 +53,7 @@ export const Token = {
                 },
             });
         }
-        var token_section = token.split(" ");
+        const token_section = token.split(" ");
         if (token_section.length != 2 || token_section[0] != "Bearer") {
             throw new GraphQLError(CustomErrorMessage.INVALID_TOKEN, {
                 extensions: {

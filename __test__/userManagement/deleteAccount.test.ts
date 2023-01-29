@@ -5,7 +5,7 @@ import { findUserWithEmail } from "../../helpers/database/userRequest";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
-const query = `mutation Register($email: String, $username: String, $password: String) {
+const query = `mutation register($email: String, $username: String, $password: String) {
     register(email: $email, username: $username, password: $password) {
       accessToken
       expires_in
@@ -17,7 +17,7 @@ const query = `mutation Register($email: String, $username: String, $password: S
     }
   }`;
 
-const clean = `query Error {
+const clean = `query deleteAccount {
     deleteAccount {
       error {
         message
@@ -49,6 +49,7 @@ describe("deleteAccount", () => {
                     username: user.username,
                     password: user.password,
                 },
+                operationName: "register",
             }),
         })
             .then((res: any) => {
@@ -63,6 +64,7 @@ describe("deleteAccount", () => {
                     },
                     body: JSON.stringify({
                         query: clean,
+                        operationName: "deleteAccount",
                     }),
                 })
                     .then((res: any) => {
@@ -84,6 +86,7 @@ describe("deleteAccount", () => {
             },
             body: JSON.stringify({
                 query: clean,
+                operationName: "deleteAccount",
             }),
         })
             .then((res: any) => {

@@ -29,6 +29,7 @@ describe("Login", () => {
                     email: process.env.EMAIL_LOGIN_TEST,
                     password: process.env.PASSWORD_LOGIN_TEST,
                 },
+                operationName: "login",
             }),
         })
             .then((res: any) => {
@@ -50,6 +51,7 @@ describe("Login", () => {
                     email: "jean.com",
                     password: "123456789",
                 },
+                operationName: "login",
             }),
         })
             .then((res: any) => {
@@ -73,6 +75,7 @@ describe("Login", () => {
                     email: "admin@admin.com",
                     password: "123456789",
                 },
+                operationName: "login",
             }),
         })
             .then((res: any) => {
@@ -96,6 +99,7 @@ describe("Login", () => {
                     email: process.env.EMAIL_LOGIN_TEST,
                     password: "123456789",
                 },
+                operationName: "login",
             }),
         })
             .then((res: any) => {

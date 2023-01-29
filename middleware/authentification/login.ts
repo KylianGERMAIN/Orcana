@@ -1,4 +1,4 @@
-import { Encrypt, Token } from "../../helpers/utils";
+import { Encrypt, RequestContext, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { User } from "../../helpers/interface/userInterface";
 import { setLog } from "../log/setLog";
@@ -39,10 +39,10 @@ export async function login(email: string, password: string, context: any) {
 
     let accesToken = "";
     let refreshToken = "";
-
     const time = new Date();
 
     try {
+        RequestContext.checkOperationName(context.body.operationName);
         const result = await loginChecking(user);
         user.id = result._id.toString();
         user.password = await Encrypt.cryptPassword(password);

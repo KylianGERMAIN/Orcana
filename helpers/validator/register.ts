@@ -45,7 +45,8 @@ async function nameChecking(username: string) {
 }
 
 export async function registerChecking(user: User) {
-    if (!validMail(user.email)) {
+    console.log(!validMail(user.email));
+    if (!validMail(user.email) == true) {
         throw new GraphQLError(CustomErrorMessage.INVALID_EMAIL, {
             extensions: {
                 status: StatusCodes.BAD_REQUEST,

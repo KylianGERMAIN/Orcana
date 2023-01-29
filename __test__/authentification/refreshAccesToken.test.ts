@@ -1,10 +1,10 @@
 import { describe, expect, test } from "@jest/globals";
 import { CustomErrorMessage } from "../../helpers/Error/error";
 
-const dotenv = require("dotenv");
-const fetch = require("node-fetch");
+import dotenv from "dotenv";
+import fetch from "node-fetch";
 
-const query = `query Query {
+const query = `query refreshAccessToken {
   refreshAccessToken {
     accessToken
     error {
@@ -27,6 +27,7 @@ describe("RefreshAccesToken", () => {
             },
             body: JSON.stringify({
                 query: query,
+                operationName: "refreshAccessToken",
             }),
         })
             .then((res: any) => {
@@ -46,6 +47,7 @@ describe("RefreshAccesToken", () => {
             },
             body: JSON.stringify({
                 query: query,
+                operationName: "refreshAccessToken",
             }),
         })
             .then((res: any) => {
@@ -68,6 +70,7 @@ describe("RefreshAccesToken", () => {
             },
             body: JSON.stringify({
                 query: query,
+                operationName: "refreshAccessToken",
             }),
         })
             .then((res: any) => {

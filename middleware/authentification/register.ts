@@ -1,4 +1,4 @@
-import { Encrypt, Token } from "../../helpers/utils";
+import { Encrypt, RequestContext, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { User } from "../../helpers/interface/userInterface";
 import { UserModel } from "../../helpers/models/userModel";
@@ -47,7 +47,9 @@ export async function register(
     const time = new Date();
 
     try {
+        await RequestContext.checkOperationName(context.body.operationName);
         await registerChecking(user);
+        console.log(context.body.operationName);
         user.password = await Encrypt.cryptPassword(password);
         const newUser = await new UserModel({
             email: user.email,
@@ -60,6 +62,8 @@ export async function register(
         user.id = res._id.toString();
         accesToken = await Token.generateAccessToken(user);
         refreshToken = await Token.generateRefreshToken(user);
+        console.log("ici " + refreshToken);
+        console.log(context.body.operationName);
         setLog(
             time,
             user.id ? user.id : "undefined",

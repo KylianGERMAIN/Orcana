@@ -1,12 +1,11 @@
 import { describe, expect, test } from "@jest/globals";
 import { User } from "../../helpers/interface/userInterface";
-import { findUserWithEmail } from "../../helpers/database/userRequest";
 import { CustomErrorMessage } from "../../helpers/Error/error";
 
-const dotenv = require("dotenv");
-const fetch = require("node-fetch");
+import dotenv from "dotenv";
+import fetch from "node-fetch";
 
-const query = `mutation Register($email: String, $username: String, $password: String) {
+const query = `mutation register($email: String, $username: String, $password: String) {
     register(email: $email, username: $username, password: $password) {
       accessToken
       expires_in
@@ -18,7 +17,7 @@ const query = `mutation Register($email: String, $username: String, $password: S
     }
   }`;
 
-const clean = `query Error {
+const clean = `query deleteAccount {
     deleteAccount {
       error {
         message
@@ -30,7 +29,7 @@ dotenv.config({ path: `.env.test` });
 
 describe("Register", () => {
     test("Success", () => {
-        var user: User = {
+        const user: User = {
             id: "",
             email: "test@hotmail.com",
             username: "test_test",
@@ -50,6 +49,7 @@ describe("Register", () => {
                     username: user.username,
                     password: user.password,
                 },
+                operationName: "register",
             }),
         })
             .then((res: any) => {
@@ -64,6 +64,7 @@ describe("Register", () => {
                     },
                     body: JSON.stringify({
                         query: clean,
+                        operationName: "deleteAccount",
                     }),
                 })
                     .then((res: any) => {
@@ -77,7 +78,7 @@ describe("Register", () => {
     });
 
     test("email is not valid", () => {
-        var user: User = {
+        const user: User = {
             id: "",
             email: "hotmail.com",
             username: "test_test",
@@ -97,6 +98,7 @@ describe("Register", () => {
                     username: user.username,
                     password: user.password,
                 },
+                operationName: "register",
             }),
         })
             .then((res: any) => {
@@ -111,7 +113,7 @@ describe("Register", () => {
     });
 
     test("email already exist", () => {
-        var user: User = {
+        const user: User = {
             id: "",
             email: "login@hotmail.com",
             username: "test_test",
@@ -131,6 +133,7 @@ describe("Register", () => {
                     username: user.username,
                     password: user.password,
                 },
+                operationName: "register",
             }),
         })
             .then((res: any) => {
@@ -145,7 +148,7 @@ describe("Register", () => {
     });
 
     test("password to short", () => {
-        var user: User = {
+        const user: User = {
             id: "",
             email: "login11@hotmail.com",
             username: "test_test",
@@ -165,6 +168,7 @@ describe("Register", () => {
                     username: user.username,
                     password: user.password,
                 },
+                operationName: "register",
             }),
         })
             .then((res: any) => {

@@ -3,12 +3,12 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { CustomErrorMessage } from "../Error/error";
 
 export async function compareRole(userRole: string, newRole: string) {
-    var listRole = ["user", "moderator", "administrator"];
+    const listRole = ["user", "moderator", "administrator"];
 
-    var numberUserRole: number = -1;
-    var numberNewRole: number = -1;
+    let numberUserRole = -1;
+    let numberNewRole = -1;
 
-    for (var i: number = 0; i != listRole.length; i++) {
+    for (let i = 0; i != listRole.length; i++) {
         if (userRole == listRole[i]) {
             numberUserRole = i;
         }
