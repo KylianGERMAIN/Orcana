@@ -22,6 +22,7 @@ export enum CustomErrorMessage {
 
     /**     Database     **/
     MODIF_DATABASE = "An error when modifying the data in the database",
+    FIND_DATABASE = "An error when finding the data in the database",
     DELETE_USER_DATABASE = "An error when deleting an user in the database",
 
     /**     Role     **/

@@ -1,18 +1,20 @@
 import { gql } from "apollo-server-express";
 
 const StatisticResponse = gql`
-    type NoLongerUsedQueryResponse {
+    type logs_statistic_response {
         totalRequest: Int
+        operation_names: [String]
     }
 `;
 
 const Statistic_Mutation = gql`
     type Mutation {
-        noLongerUsedQuery(
-            month: String
-            year: String
-            date: String
-        ): NoLongerUsedQueryResponse
+        logs_statistic(
+            month: Int
+            year: Int
+            day: Int
+            level: String
+        ): logs_statistic_response
     }
 `;
 

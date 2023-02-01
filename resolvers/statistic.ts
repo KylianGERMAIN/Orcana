@@ -1,11 +1,11 @@
-import { noLongerUsedQuery } from "../middleware/log/noLongerUsedQuery";
+import { logs_statistic } from "../middleware/log/no_longer_used_query";
 
 export const StatisticMutation = {
-    noLongerUsedQuery: async (
+    logs_statistic: async (
         parent: never,
-        { month, year, date }: any,
+        { month, year, day, level }: any,
         context: any
-    ) => noLongerUsedQuery(),
+    ) => logs_statistic(month, year, day, level),
 };
 
 export const StatisticQuery = {};
