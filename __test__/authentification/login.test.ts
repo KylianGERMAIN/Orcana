@@ -1,18 +1,18 @@
 import { describe, expect, test } from "@jest/globals";
-import { CustomErrorMessage } from "../../helpers/Error/error";
+import { CustomErrorMessage } from "../../helpers/error/error";
 
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
 const mutation = `mutation login($password: String, $email: String) {
   login(password: $password, email: $email) {
-    accessToken
+    access_token
     error {
       message
     }
     expires_in
-    refreshToken
-    tokenType
+    refresh_token
+    token_type
   }
 }`;
 

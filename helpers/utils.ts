@@ -3,21 +3,21 @@ import jsonwebtoken from "jsonwebtoken";
 import { User } from "./interface/userInterface";
 import { GraphQLError } from "graphql";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { CustomErrorMessage } from "./Error/error";
+import { CustomErrorMessage } from "./error/error";
 
 export const Encrypt = {
-    cryptPassword: (password: string) =>
+    crypt_password: (password: string) =>
         bcrypt
             .genSalt(15)
             .then((salt) => bcrypt.hash(password, salt))
             .then((hash) => hash),
 
-    comparePassword: (password: string, hashPassword: string) =>
+    compare_password: (password: string, hashPassword: string) =>
         bcrypt.compare(password, hashPassword).then((resp) => resp),
 };
 
 export const RequestContext = {
-    checkOperationName: (operationName: string) => {
+    check_operation_name: (operationName: string) => {
         if (operationName == undefined) {
             throw new Error("No operationName");
         }
@@ -25,7 +25,7 @@ export const RequestContext = {
 };
 
 export const Token = {
-    generateAccessToken: async (user: User) => {
+    generate_access_token: async (user: User) => {
         return await jsonwebtoken.sign(
             { id: user.id },
             process.env.ACCESS_TOKEN_SECRET as string,
@@ -34,7 +34,7 @@ export const Token = {
             }
         );
     },
-    generateRefreshToken: async (user: User) => {
+    generate_refresh_token: async (user: User) => {
         return await jsonwebtoken.sign(
             { id: user.id },
             process.env.REFRESH_TOKEN_SECRET as string,
@@ -43,7 +43,7 @@ export const Token = {
             }
         );
     },
-    decodeRefreshToken: async (token: string, key: string) => {
+    decode_refresh_token: async (token: string, key: string) => {
         if (token == undefined) {
             throw new GraphQLError(CustomErrorMessage.NO_AUTHORIZATION, {
                 extensions: {

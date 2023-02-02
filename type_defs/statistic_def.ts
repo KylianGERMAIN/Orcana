@@ -1,13 +1,13 @@
 import { gql } from "apollo-server-express";
 
-const StatisticResponse = gql`
+const statistic_response = gql`
     type logs_statistic_response {
-        totalRequest: Int
-        operation_names: [String]
+        total_request: Int
+        operationName: [String]
     }
 `;
 
-const Statistic_Mutation = gql`
+const statistic_mutation = gql`
     type Mutation {
         logs_statistic(
             month: Int
@@ -18,4 +18,4 @@ const Statistic_Mutation = gql`
     }
 `;
 
-export const Statistic = [StatisticResponse, Statistic_Mutation];
+export const statistic = [statistic_response, statistic_mutation];

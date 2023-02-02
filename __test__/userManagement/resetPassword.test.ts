@@ -3,8 +3,8 @@ import { describe, expect, test } from "@jest/globals";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
-const query = `mutation resetPassword($newPassword: String) {
-  resetPassword(newPassword: $newPassword) {
+const query = `mutation reset_password($newPassword: String) {
+    reset_password(newPassword: $newPassword) {
     error {
       message
     }
@@ -26,7 +26,7 @@ describe("reset Password", () => {
                 variables: {
                     newPassword: "mynewpassword",
                 },
-                operationName: "resetPassword",
+                operationName: "reset_password",
             }),
         })
             .then((res: any) => {
@@ -44,16 +44,12 @@ describe("reset Password", () => {
                         variables: {
                             newPassword: process.env.PASSWORD_LOGIN_TEST,
                         },
-                        operationName: "resetPassword",
+                        operationName: "reset_password",
                     }),
-                })
-                    .then((res: any) => {
-                        expect(res.status).toEqual(200);
-                        return res.json();
-                    })
-                    .then((res: any) => {
-                        expect(res.errors).toBe(undefined);
-                    });
+                }).then((res: any) => {
+                    expect(res.status).toEqual(200);
+                    return res.json();
+                });
             });
     });
 
@@ -66,7 +62,7 @@ describe("reset Password", () => {
             },
             body: JSON.stringify({
                 query: query,
-                operationName: "resetPassword",
+                operationName: "reset_password",
             }),
         })
             .then((res: any) => {

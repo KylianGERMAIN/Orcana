@@ -2,10 +2,10 @@ import { Encrypt, RequestContext, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { User } from "../../helpers/interface/userInterface";
 import { UserModel } from "../../helpers/models/userModel";
-import { registerChecking } from "../../helpers/validator/register";
-import { findUserWithEmail } from "../../helpers/database/userRequest";
+import { register_checking } from "../../helpers/validator/register";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { setLog } from "../log/setLog";
+import { set_log } from "../log/set_log";
+import { find_user_with_email } from "../../helpers/database/userRequest";
 
 export async function register(
     { email, username, password }: User,
@@ -41,16 +41,15 @@ export async function register(
         query: context.body.query ? context.body.query : "",
     };
 
-    let accesToken = "";
-    let refreshToken = "";
+    let acces_token = "";
+    let refresh_token = "";
 
     const time = new Date();
 
     try {
-        await RequestContext.checkOperationName(context.body.operationName);
-        await registerChecking(user);
-        console.log(context.body.operationName);
-        user.password = await Encrypt.cryptPassword(password);
+        await RequestContext.check_operation_name(context.body.operationName);
+        await register_checking(user);
+        user.password = await Encrypt.crypt_password(password);
         const newUser = await new UserModel({
             email: user.email,
             username: user.username,
@@ -58,36 +57,20 @@ export async function register(
             role: user.role,
         });
         await newUser.save();
-        const res: any = await findUserWithEmail(user);
+        const res: any = await find_user_with_email(user);
         user.id = res._id.toString();
-        accesToken = await Token.generateAccessToken(user);
-        refreshToken = await Token.generateRefreshToken(user);
-        console.log("ici " + refreshToken);
-        console.log(context.body.operationName);
-        setLog(
-            time,
-            user.id ? user.id : "undefined",
-            "info",
-            _error,
-            query,
-            http_info
-        );
+        acces_token = await Token.generate_access_token(user);
+        refresh_token = await Token.generate_refresh_token(user);
+        set_log(time, user.id, "info", _error, query, http_info);
     } catch (e: any) {
         _error = e;
-        setLog(
-            time,
-            user.id ? user.id : "undefined",
-            "error",
-            _error,
-            query,
-            http_info
-        );
+        set_log(time, user.id, "error", _error, query, http_info);
     }
     return {
         error: _error,
-        refreshToken: refreshToken,
-        accessToken: accesToken,
+        refresh_token: refresh_token,
+        access_token: acces_token,
         expires_in: "1800s",
-        tokenType: "Bearer",
+        token_type: "Bearer",
     };
 }

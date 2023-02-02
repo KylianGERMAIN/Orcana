@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { CustomErrorMessage } from "../../../helpers/Error/error";
+import { CustomErrorMessage } from "../../../helpers/error/error";
 import { LogModel } from "../../../helpers/models/logModel";
 import { Log } from "./log";
 

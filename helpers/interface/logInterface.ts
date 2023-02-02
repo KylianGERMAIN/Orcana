@@ -1,6 +1,6 @@
 export interface QueryContent {
-  operationName: string;
-  query: string;
+    operationName: string;
+    query: string;
 }
 
 export interface HttpInfo {

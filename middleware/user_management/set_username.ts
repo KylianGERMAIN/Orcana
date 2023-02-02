@@ -1,14 +1,17 @@
 import { GraphQLError } from "graphql";
-import { findUserWithId, updateUser } from "../../helpers/database/userRequest";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { Token } from "../../helpers/utils";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { setLog } from "../log/setLog";
-import { CustomErrorMessage } from "../../helpers/Error/error";
+import { set_log } from "../log/set_log";
+import { CustomErrorMessage } from "../../helpers/error/error";
+import {
+    find_user_with_id,
+    update_user,
+} from "../../helpers/database/userRequest";
 
-export async function setUsername(context: any, name: string) {
+export async function set_username(context: any, name: string) {
     const user: User = {
         email: "",
         username: "",
@@ -54,26 +57,19 @@ export async function setUsername(context: any, name: string) {
                 }
             );
         }
-        const token: JWT = (await Token.decodeRefreshToken(
+        const token: JWT = (await Token.decode_refresh_token(
             context.headers.authorization,
             process.env.ACCESS_TOKEN_SECRET as string
         )) as JWT;
         if (token) {
             user.id = token.payload.id;
-            const res: any = await findUserWithId(user);
-            await updateUser({ id: res.id }, { username: name });
-            setLog(time, user.id, "info", _error, query, http_info);
+            const res: any = await find_user_with_id(user);
+            await update_user({ id: res.id }, { username: name });
+            set_log(time, user.id, "info", _error, query, http_info);
         }
     } catch (e: any) {
         _error = e;
-        setLog(
-            time,
-            user.id ? user.id : "undefined",
-            "error",
-            _error,
-            query,
-            http_info
-        );
+        set_log(time, user.id, "error", _error, query, http_info);
     }
     return {
         error: _error,

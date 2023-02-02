@@ -29,7 +29,7 @@ export async function logs_statistic(
     }
     return {
         error: _error,
-        totalRequest: log.v_log_length,
-        operation_names: log.v_operation_names,
+        total_request: log.v_log_length,
+        operationName: log.v_operation_names,
     };
 }

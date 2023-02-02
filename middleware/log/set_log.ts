@@ -2,13 +2,13 @@ import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { LogModel } from "../../helpers/models/logModel";
 
-export async function setLog(
-  time: Date,
-  user_id: string,
-  level: string,
-  error: ErrorResponse,
-  query: QueryContent,
-  http_info: HttpInfo
+export async function set_log(
+    time: Date,
+    user_id: string | undefined,
+    level: string,
+    error: ErrorResponse,
+    query: QueryContent,
+    http_info: HttpInfo
 ) {
     const end: any = new Date().getTime() - time.getTime();
     const log = await new LogModel({

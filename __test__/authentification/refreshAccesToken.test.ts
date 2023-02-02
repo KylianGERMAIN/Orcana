@@ -1,17 +1,17 @@
 import { describe, expect, test } from "@jest/globals";
-import { CustomErrorMessage } from "../../helpers/Error/error";
+import { CustomErrorMessage } from "../../helpers/error/error";
 
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
-const query = `query refreshAccessToken {
-  refreshAccessToken {
-    accessToken
+const query = `query refresh_access_token {
+  refresh_access_token {
+    access_token
     error {
       message
     }
     expires_in
-    tokenType
+    token_type
   }
 }`;
 
@@ -27,7 +27,7 @@ describe("RefreshAccesToken", () => {
             },
             body: JSON.stringify({
                 query: query,
-                operationName: "refreshAccessToken",
+                operationName: "refresh_access_token",
             }),
         })
             .then((res: any) => {
@@ -47,7 +47,7 @@ describe("RefreshAccesToken", () => {
             },
             body: JSON.stringify({
                 query: query,
-                operationName: "refreshAccessToken",
+                operationName: "refresh_access_token",
             }),
         })
             .then((res: any) => {
@@ -70,7 +70,7 @@ describe("RefreshAccesToken", () => {
             },
             body: JSON.stringify({
                 query: query,
-                operationName: "refreshAccessToken",
+                operationName: "refresh_access_token",
             }),
         })
             .then((res: any) => {

@@ -1,12 +1,12 @@
-import { validMail } from "../../tools/inputTools";
+import { valid_mail } from "../../tools/input_tools";
 import { GraphQLError } from "graphql";
 import mongoose from "mongoose";
 import { UserSchema } from "../models/userModel";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { User } from "../interface/userInterface";
-import { CustomErrorMessage } from "../Error/error";
+import { CustomErrorMessage } from "../error/error";
 
-async function emailExist(email: string) {
+async function email_exist(email: string) {
     const UserModel = mongoose.model("users", UserSchema);
     const res = await UserModel.findOne({ email: email }).clone();
     if (res != null) {
@@ -20,7 +20,7 @@ async function emailExist(email: string) {
     }
 }
 
-async function passwordChecking(password: string) {
+async function password_checking(password: string) {
     if (password.length <= 6) {
         throw new GraphQLError(CustomErrorMessage.PASSWORD_LENGTH, {
             extensions: {
@@ -32,7 +32,7 @@ async function passwordChecking(password: string) {
     }
 }
 
-async function nameChecking(username: string) {
+async function name_checking(username: string) {
     if (username.length <= 6) {
         throw new GraphQLError(CustomErrorMessage.NAME_LENGTH, {
             extensions: {
@@ -44,9 +44,8 @@ async function nameChecking(username: string) {
     }
 }
 
-export async function registerChecking(user: User) {
-    console.log(!validMail(user.email));
-    if (!validMail(user.email) == true) {
+export async function register_checking(user: User) {
+    if (valid_mail(user.email) == false) {
         throw new GraphQLError(CustomErrorMessage.INVALID_EMAIL, {
             extensions: {
                 status: StatusCodes.BAD_REQUEST,
@@ -54,8 +53,9 @@ export async function registerChecking(user: User) {
                 field: "email",
             },
         });
+    } else {
+        await email_exist(user.email);
+        await name_checking(user.username);
+        await password_checking(user.password);
     }
-    await emailExist(user.email);
-    await nameChecking(user.username);
-    await passwordChecking(user.password);
 }

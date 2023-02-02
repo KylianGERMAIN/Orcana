@@ -1,9 +1,9 @@
 import { User } from "../helpers/interface/userInterface";
 import { login } from "../middleware/authentification/login";
-import { refreshAccessToken } from "../middleware/authentification/refreshAccessToken";
+import { refresh_access_token } from "../middleware/authentification/refresh_access_token";
 import { register } from "../middleware/authentification/register";
 
-export const AuthMutation = {
+export const auth_mutation = {
     register: async (
         parent: never,
         { email, username, password }: User,
@@ -13,7 +13,7 @@ export const AuthMutation = {
         login(email, password, context),
 };
 
-export const AuthQuery = {
-    refreshAccessToken: async (parent: never, values: never, context: any) =>
-        refreshAccessToken(context),
+export const auth_query = {
+    refresh_access_token: async (parent: never, values: never, context: any) =>
+        refresh_access_token(context),
 };

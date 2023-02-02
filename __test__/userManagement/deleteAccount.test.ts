@@ -1,24 +1,23 @@
 import { describe, expect, test } from "@jest/globals";
 import { User } from "../../helpers/interface/userInterface";
-import { findUserWithEmail } from "../../helpers/database/userRequest";
 
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
 const query = `mutation register($email: String, $username: String, $password: String) {
     register(email: $email, username: $username, password: $password) {
-      accessToken
+      access_token
       expires_in
-      refreshToken
-      tokenType
+      refresh_token
+      token_type
       error {
         message
       }
     }
   }`;
 
-const clean = `query deleteAccount {
-    deleteAccount {
+const clean = `query delete_account {
+    delete_account {
       error {
         message
       }
@@ -60,11 +59,11 @@ describe("deleteAccount", () => {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${res.data.register.accessToken}`,
+                        Authorization: `Bearer ${res.data.register.access_token}`,
                     },
                     body: JSON.stringify({
                         query: clean,
-                        operationName: "deleteAccount",
+                        operationName: "delete_account",
                     }),
                 })
                     .then((res: any) => {
@@ -86,7 +85,7 @@ describe("deleteAccount", () => {
             },
             body: JSON.stringify({
                 query: clean,
-                operationName: "deleteAccount",
+                operationName: "delete_account",
             }),
         })
             .then((res: any) => {

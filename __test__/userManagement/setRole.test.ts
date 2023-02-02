@@ -1,11 +1,11 @@
 import { describe, expect, test } from "@jest/globals";
-import { CustomErrorMessage } from "../../helpers/Error/error";
+import { CustomErrorMessage } from "../../helpers/error/error";
 
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
-const mutation = `mutation setRole($user_id: String, $role: String) {
-  setRole(user_id: $user_id, role: $role) {
+const mutation = `mutation set_role($user_id: String, $role: String) {
+  set_role(user_id: $user_id, role: $role) {
     error {
       message
     }
@@ -28,7 +28,7 @@ describe("set Role", () => {
                     user_id: process.env.ID_LOGIN_TEST,
                     role: "administrator",
                 },
-                operationName: "setRole",
+                operationName: "set_role",
             }),
         })
             .then((res: any) => {
@@ -53,7 +53,7 @@ describe("set Role", () => {
                     user_id: process.env.ID_LOGIN_TEST,
                     role: "ghost",
                 },
-                operationName: "setRole",
+                operationName: "set_role",
             }),
         })
             .then((res: any) => {

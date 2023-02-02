@@ -1,8 +1,8 @@
 import { GraphQLError } from "graphql";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { CustomErrorMessage } from "../Error/error";
+import { CustomErrorMessage } from "../error/error";
 
-export async function compareRole(userRole: string, newRole: string) {
+export async function compare_role(userRole: string, newRole: string) {
     const listRole = ["user", "moderator", "administrator"];
 
     let numberUserRole = -1;

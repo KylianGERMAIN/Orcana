@@ -1,16 +1,28 @@
+import {
+    find_user_with_id,
+    update_user,
+} from "../../helpers/database/userRequest";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
-import { RequestContext, Token } from "../../helpers/utils";
-import { setLog } from "../log/setLog";
+import { Token } from "../../helpers/utils";
+import { compare_role } from "../../helpers/validator/role";
+import { set_log } from "../log/set_log";
 
-export async function refreshAccessToken(context: any) {
+export async function set_role(context: any, id: string, role: string) {
     const user: User = {
         email: "",
         username: "",
         password: "",
         role: "",
         id: "",
+    };
+    const toUser: User = {
+        email: "",
+        username: "",
+        password: "",
+        role: role,
+        id: id,
     };
     let _error: ErrorResponse = {
         message: "",
@@ -35,35 +47,31 @@ export async function refreshAccessToken(context: any) {
         query: context.body.query ? context.body.query : "",
     };
 
-    let newToken = "";
     const time = new Date();
 
     try {
-        RequestContext.checkOperationName(context.body.operationName);
-        const token: JWT = (await Token.decodeRefreshToken(
+        const token: JWT = (await Token.decode_refresh_token(
             context.headers.authorization,
-            process.env.REFRESH_TOKEN_SECRET as string
+            process.env.ACCESS_TOKEN_SECRET as string
         )) as JWT;
         if (token) {
             user.id = token.payload.id;
-            newToken = await Token.generateAccessToken(user);
-            setLog(time, user.id, "info", _error, query, http_info);
+            const userIn: any = await find_user_with_id(user);
+            user.role = userIn.role;
+            const userOut: any = await find_user_with_id(toUser);
+            toUser.email = userOut.email;
+            await compare_role(
+                user.role ? user.role : "undefined",
+                toUser.role ? toUser.role : "undefined"
+            );
+            await update_user({ email: toUser.email }, { role: toUser.role });
+            set_log(time, user.id, "info", _error, query, http_info);
         }
     } catch (e: any) {
         _error = e;
-        setLog(
-            time,
-            user.id ? user.id : "undefined",
-            "error",
-            _error,
-            query,
-            http_info
-        );
+        set_log(time, user.id, "error", _error, query, http_info);
     }
     return {
         error: _error,
-        accessToken: newToken,
-        expires_in: "1800s",
-        tokenType: "Bearer",
     };
 }

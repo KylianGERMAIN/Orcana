@@ -1,14 +1,14 @@
 import { GraphQLError } from "graphql";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import mongoose from "mongoose";
-import { validMail } from "../../tools/inputTools";
-import { CustomErrorMessage } from "../Error/error";
+import { valid_mail } from "../../tools/input_tools";
+import { CustomErrorMessage } from "../error/error";
 import { User } from "../interface/userInterface";
 import { UserSchema } from "../models/userModel";
 import { Encrypt } from "../utils";
 
-export async function loginChecking(user: User) {
-    if (!validMail(user.email)) {
+export async function login_checking(user: User) {
+    if (!valid_mail(user.email)) {
         throw new GraphQLError(CustomErrorMessage.INVALID_EMAIL, {
             extensions: {
                 status: StatusCodes.BAD_REQUEST,
@@ -28,7 +28,7 @@ export async function loginChecking(user: User) {
             },
         });
     }
-    if ((await Encrypt.comparePassword(user.password, res.password)) != true) {
+    if ((await Encrypt.compare_password(user.password, res.password)) != true) {
         throw new GraphQLError(CustomErrorMessage.BAD_PASSWORD, {
             extensions: {
                 status: StatusCodes.FORBIDDEN,

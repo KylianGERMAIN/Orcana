@@ -1,11 +1,11 @@
-import { deleteUser } from "../../helpers/database/userRequest";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { Token } from "../../helpers/utils";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { setLog } from "../log/setLog";
+import { set_log } from "../log/set_log";
+import { delete_user } from "../../helpers/database/userRequest";
 
-export async function deleteAccount(context: any) {
+export async function delete_account(context: any) {
     const user: User = {
         email: "",
         username: "",
@@ -39,25 +39,18 @@ export async function deleteAccount(context: any) {
     const time = new Date();
 
     try {
-        const token: JWT = (await Token.decodeRefreshToken(
+        const token: JWT = (await Token.decode_refresh_token(
             context.headers.authorization,
             process.env.ACCESS_TOKEN_SECRET as string
         )) as JWT;
         if (token) {
             user.id = token.payload.id;
-            await deleteUser({ _id: user.id });
-            setLog(time, user.id, "info", _error, query, http_info);
+            await delete_user({ _id: user.id });
+            set_log(time, user.id, "info", _error, query, http_info);
         }
     } catch (e: any) {
         _error = e;
-        setLog(
-            time,
-            user.id ? user.id : "undefined",
-            "error",
-            _error,
-            query,
-            http_info
-        );
+        set_log(time, user.id, "error", _error, query, http_info);
     }
     return {
         error: _error,

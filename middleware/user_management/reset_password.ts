@@ -1,15 +1,18 @@
 import { GraphQLError } from "graphql";
 import { ReasonPhrases } from "http-status-codes/build/cjs/reason-phrases";
 import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
-import { findUserWithId, updateUser } from "../../helpers/database/userRequest";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { Encrypt, Token } from "../../helpers/utils";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { setLog } from "../log/setLog";
-import { CustomErrorMessage } from "../../helpers/Error/error";
+import { set_log } from "../log/set_log";
+import { CustomErrorMessage } from "../../helpers/error/error";
+import {
+    find_user_with_id,
+    update_user,
+} from "../../helpers/database/userRequest";
 
-export async function resetPassword(context: any, newPassword: string) {
+export async function reset_password(context: any, newPassword: string) {
     const user: User = {
         email: "",
         username: "",
@@ -43,14 +46,14 @@ export async function resetPassword(context: any, newPassword: string) {
     const time = new Date();
 
     try {
-        const token: JWT = (await Token.decodeRefreshToken(
+        const token: JWT = (await Token.decode_refresh_token(
             context.headers.authorization,
             process.env.ACCESS_TOKEN_SECRET as string
         )) as JWT;
         if (token) {
             user.id = token.payload.id;
-            const res: any = await findUserWithId(user);
-            if (await Encrypt.comparePassword(newPassword, res.password)) {
+            const res: any = await find_user_with_id(user);
+            if (await Encrypt.compare_password(newPassword, res.password)) {
                 throw new GraphQLError(
                     CustomErrorMessage.NO_CHANGE_WITH_SAME_PASSWORD,
                     {
@@ -62,21 +65,14 @@ export async function resetPassword(context: any, newPassword: string) {
                     }
                 );
             } else {
-                user.password = await Encrypt.cryptPassword(newPassword);
-                await updateUser({ id: user.id }, { password: user.password });
-                setLog(time, user.id, "info", _error, query, http_info);
+                user.password = await Encrypt.crypt_password(newPassword);
+                await update_user({ id: user.id }, { password: user.password });
+                set_log(time, user.id, "info", _error, query, http_info);
             }
         }
     } catch (e: any) {
         _error = e;
-        setLog(
-            time,
-            user.id ? user.id : "undefined",
-            "error",
-            _error,
-            query,
-            http_info
-        );
+        set_log(time, user.id, "error", _error, query, http_info);
     }
     return {
         error: _error,

@@ -1,11 +1,11 @@
 import { describe, expect, test } from "@jest/globals";
-import { CustomErrorMessage } from "../../helpers/Error/error";
+import { CustomErrorMessage } from "../../helpers/error/error";
 
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
-const mutation = `mutation setUsername($username: String) {
-  setUsername(username: $username) {
+const mutation = `mutation set_username($username: String) {
+    set_username(username: $username) {
     error {
       message
     }
@@ -27,7 +27,7 @@ describe("set Username", () => {
                 variables: {
                     username: Math.random().toString(36),
                 },
-                operationName: "setUsername",
+                operationName: "set_username",
             }),
         })
             .then((res: any) => {
@@ -48,7 +48,7 @@ describe("set Username", () => {
             },
             body: JSON.stringify({
                 query: mutation,
-                operationName: "setUsername",
+                operationName: "set_username",
             }),
         })
             .then((res: any) => {
@@ -74,7 +74,7 @@ describe("set Username", () => {
                 variables: {
                     username: "1",
                 },
-                operationName: "setUsername",
+                operationName: "set_username",
             }),
         })
             .then((res: any) => {

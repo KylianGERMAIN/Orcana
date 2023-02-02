@@ -1,17 +1,20 @@
-import { AuthMutation, AuthQuery } from "./authentification";
-import { StatisticMutation, StatisticQuery } from "./statistic";
-import { UserManagementMutation, UserManagementQuery } from "./userManagement";
+import { auth_mutation, auth_query } from "./authentification";
+import { statistic_mutation, statistic_query } from "./statistic";
+import {
+    user_management_mutation,
+    user_management_query,
+} from "./user_management";
 
 export const resolvers = {
     Query: {
-        defaultPost: () => "Welcome to Orcana",
-        ...AuthQuery,
-        ...UserManagementQuery,
-        ...StatisticQuery,
+        default_post: () => "Welcome to Orcana",
+        ...auth_query,
+        ...user_management_query,
+        ...statistic_query,
     },
     Mutation: {
-        ...AuthMutation,
-        ...UserManagementMutation,
-        ...StatisticMutation,
+        ...auth_mutation,
+        ...user_management_mutation,
+        ...statistic_mutation,
     },
 };

@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 import { UserSchema } from "../models/userModel";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { User } from "../interface/userInterface";
-import { CustomErrorMessage } from "../Error/error";
+import { CustomErrorMessage } from "../error/error";
 
-export async function findUserWithEmail(user: User) {
+export async function find_user_with_email(user: User) {
     const UserModel = mongoose.model("users", UserSchema);
     const res = await UserModel.findOne({ email: user.email }).clone();
     if (res == null) {
@@ -20,7 +20,7 @@ export async function findUserWithEmail(user: User) {
     return res;
 }
 
-export async function findUserWithId(user: User) {
+export async function find_user_with_id(user: User) {
     const UserModel = mongoose.model("users", UserSchema);
     const res = await UserModel.findOne({ _id: user.id }).clone();
     if (res == null) {
@@ -35,7 +35,7 @@ export async function findUserWithId(user: User) {
     return res;
 }
 
-export async function updateUser(filter: object, update: object) {
+export async function update_user(filter: object, update: object) {
     const UserModel = mongoose.model("users", UserSchema);
     await UserModel.updateOne(filter, update, function (err: any) {
         if (err) {
@@ -49,7 +49,7 @@ export async function updateUser(filter: object, update: object) {
     }).clone();
 }
 
-export async function deleteUser(filter: object) {
+export async function delete_user(filter: object) {
     const UserModel = mongoose.model("users", UserSchema);
     await UserModel.deleteOne(filter, function (err: any) {
         if (err) {

@@ -1,7 +1,7 @@
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import mongoose from "mongoose";
-import { typeDefs } from "./typeDefs/typeDef";
+import { typeDefs } from "./type_defs/type_def";
 import { resolvers } from "./resolvers/resolver";
 import dotenv from "dotenv";
 
