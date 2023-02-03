@@ -43,12 +43,9 @@ export async function login(email: string, password: string, context: any) {
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
-        await authentification.check_valid_email(authentification);
-        const result = await find_user_with_email(user);
-        await authentification.compare_password(
-            authentification,
-            result.password
-        );
+        await authentification.check_valid_email();
+        const result = await find_user_with_email(authentification.user);
+        await authentification.compare_password(result.password);
         authentification.user.id = result._id.toString();
         authentification.acces_token = await Token.generate_access_token(
             authentification.user

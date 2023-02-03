@@ -3,6 +3,7 @@ import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { RequestContext, Token } from "../../helpers/utils";
 import { set_log } from "../log/set_log";
+import { Authentification } from "./authentification_class/authentification";
 
 export async function refresh_access_token(context: any) {
     const user: User = {
@@ -35,8 +36,8 @@ export async function refresh_access_token(context: any) {
         query: context.body.query ? context.body.query : "",
     };
 
-    let newToken = "";
     const time = new Date();
+    const authentification = new Authentification(user);
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
@@ -45,17 +46,34 @@ export async function refresh_access_token(context: any) {
             process.env.REFRESH_TOKEN_SECRET as string
         )) as JWT;
         if (token) {
-            user.id = token.payload.id;
-            newToken = await Token.generate_access_token(user);
-            set_log(time, user.id, "info", _error, query, http_info);
+            authentification.user.id = token.payload.id;
+            authentification._acces_token = await Token.generate_access_token(
+                authentification.user
+            );
+            set_log(
+                time,
+                authentification.user.id,
+                "info",
+                _error,
+                query,
+                http_info
+            );
         }
     } catch (e: any) {
+        authentification.reset_token();
         _error = e;
-        set_log(time, user.id, "error", _error, query, http_info);
+        set_log(
+            time,
+            authentification.user.id,
+            "error",
+            _error,
+            query,
+            http_info
+        );
     }
     return {
         error: _error,
-        accessToken: newToken,
+        accessToken: authentification._acces_token,
         expires_in: "1800s",
         tokenType: "Bearer",
     };

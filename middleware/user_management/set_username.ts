@@ -10,11 +10,12 @@ import {
     find_user_with_id,
     update_user,
 } from "../../helpers/database/userRequest";
+import { Authentification } from "../authentification/authentification_class/authentification";
 
 export async function set_username(context: any, name: string) {
     const user: User = {
         email: "",
-        username: "",
+        username: name,
         password: "",
         role: "",
         id: "",
@@ -43,33 +44,50 @@ export async function set_username(context: any, name: string) {
     };
 
     const time = new Date();
+    const authentification = new Authentification(user);
 
     try {
-        if (!name || name.length < 6) {
-            throw new GraphQLError(
-                CustomErrorMessage.USERNAME_NO_EXIST_TOO_SHORT,
-                {
-                    extensions: {
-                        status: StatusCodes.FORBIDDEN,
-                        error: ReasonPhrases.FORBIDDEN,
-                        field: "username",
-                    },
-                }
-            );
-        }
-        const token: JWT = (await Token.decode_refresh_token(
-            context.headers.authorization,
-            process.env.ACCESS_TOKEN_SECRET as string
-        )) as JWT;
-        if (token) {
-            user.id = token.payload.id;
-            const res: any = await find_user_with_id(user);
-            await update_user({ id: res.id }, { username: name });
-            set_log(time, user.id, "info", _error, query, http_info);
+        if (authentification.user.username) {
+            await authentification.check_username();
+            const token: JWT = (await Token.decode_refresh_token(
+                context.headers.authorization,
+                process.env.ACCESS_TOKEN_SECRET as string
+            )) as JWT;
+            if (token) {
+                authentification.user.id = token.payload.id;
+                const res: any = await find_user_with_id(authentification.user);
+                await update_user(
+                    { id: res.id },
+                    { username: authentification.user.username }
+                );
+                set_log(
+                    time,
+                    authentification.user.id,
+                    "info",
+                    _error,
+                    query,
+                    http_info
+                );
+            }
+        } else {
+            throw new GraphQLError(CustomErrorMessage.USERNAME_NO_EXIST, {
+                extensions: {
+                    status: StatusCodes.FORBIDDEN,
+                    error: ReasonPhrases.FORBIDDEN,
+                    field: "username",
+                },
+            });
         }
     } catch (e: any) {
         _error = e;
-        set_log(time, user.id, "error", _error, query, http_info);
+        set_log(
+            time,
+            authentification.user.id,
+            "error",
+            _error,
+            query,
+            http_info
+        );
     }
     return {
         error: _error,

@@ -1,14 +1,15 @@
-import { valid_mail } from "../../tools/input_tools";
 import { GraphQLError } from "graphql";
 import mongoose from "mongoose";
-import { UserSchema } from "../models/userModel";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { User } from "../interface/userInterface";
-import { CustomErrorMessage } from "../error/error";
+import { Authentification } from "../../../middleware/authentification/authentification_class/authentification";
+import { CustomErrorMessage } from "../../error/error";
+import { UserSchema } from "../../models/userModel";
 
-async function email_exist(email: string) {
+export async function check_email_exist(this: Authentification) {
     const UserModel = mongoose.model("users", UserSchema);
-    const res = await UserModel.findOne({ email: email }).clone();
+    const res = await UserModel.findOne({
+        email: this.user.email,
+    }).clone();
     if (res != null) {
         throw new GraphQLError(CustomErrorMessage.EMAIL_ALREADY_EXIST, {
             extensions: {
@@ -20,8 +21,8 @@ async function email_exist(email: string) {
     }
 }
 
-async function password_checking(password: string) {
-    if (password.length <= 6) {
+export async function check_password(this: Authentification) {
+    if (this.user.password.length <= 6) {
         throw new GraphQLError(CustomErrorMessage.PASSWORD_LENGTH, {
             extensions: {
                 status: StatusCodes.FORBIDDEN,
@@ -32,8 +33,8 @@ async function password_checking(password: string) {
     }
 }
 
-async function name_checking(username: string) {
-    if (username.length <= 6) {
+export async function check_username(this: Authentification) {
+    if (this.user.username.length <= 6) {
         throw new GraphQLError(CustomErrorMessage.NAME_LENGTH, {
             extensions: {
                 status: StatusCodes.FORBIDDEN,
@@ -41,21 +42,5 @@ async function name_checking(username: string) {
                 field: "username",
             },
         });
-    }
-}
-
-export async function register_checking(user: User) {
-    if (valid_mail(user.email) == false) {
-        throw new GraphQLError(CustomErrorMessage.INVALID_EMAIL, {
-            extensions: {
-                status: StatusCodes.BAD_REQUEST,
-                error: ReasonPhrases.BAD_REQUEST,
-                field: "email",
-            },
-        });
-    } else {
-        await email_exist(user.email);
-        await name_checking(user.username);
-        await password_checking(user.password);
     }
 }

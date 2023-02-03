@@ -11,6 +11,7 @@ import {
     find_user_with_id,
     update_user,
 } from "../../helpers/database/userRequest";
+import { Authentification } from "../authentification/authentification_class/authentification";
 
 export async function reset_password(context: any, newPassword: string) {
     const user: User = {
@@ -44,6 +45,7 @@ export async function reset_password(context: any, newPassword: string) {
     };
 
     const time = new Date();
+    const authentification = new Authentification(user);
 
     try {
         const token: JWT = (await Token.decode_refresh_token(
@@ -51,8 +53,9 @@ export async function reset_password(context: any, newPassword: string) {
             process.env.ACCESS_TOKEN_SECRET as string
         )) as JWT;
         if (token) {
-            user.id = token.payload.id;
-            const res: any = await find_user_with_id(user);
+            authentification.user.id = token.payload.id;
+            authentification.check_password();
+            const res: any = await find_user_with_id(authentification.user);
             if (await Encrypt.compare_password(newPassword, res.password)) {
                 throw new GraphQLError(
                     CustomErrorMessage.NO_CHANGE_WITH_SAME_PASSWORD,
@@ -65,14 +68,33 @@ export async function reset_password(context: any, newPassword: string) {
                     }
                 );
             } else {
-                user.password = await Encrypt.crypt_password(newPassword);
-                await update_user({ id: user.id }, { password: user.password });
-                set_log(time, user.id, "info", _error, query, http_info);
+                authentification.user.password = await Encrypt.crypt_password(
+                    newPassword
+                );
+                await update_user(
+                    { id: authentification.user.id },
+                    { password: authentification.user.password }
+                );
+                set_log(
+                    time,
+                    authentification.user.id,
+                    "info",
+                    _error,
+                    query,
+                    http_info
+                );
             }
         }
     } catch (e: any) {
         _error = e;
-        set_log(time, user.id, "error", _error, query, http_info);
+        set_log(
+            time,
+            authentification.user.id,
+            "error",
+            _error,
+            query,
+            http_info
+        );
     }
     return {
         error: _error,

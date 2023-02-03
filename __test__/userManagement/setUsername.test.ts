@@ -57,7 +57,7 @@ describe("set Username", () => {
             })
             .then((res: any) => {
                 expect(res.errors[0].message).toMatch(
-                    CustomErrorMessage.USERNAME_NO_EXIST_TOO_SHORT
+                    CustomErrorMessage.USERNAME_NO_EXIST
                 );
             });
     });
@@ -83,7 +83,7 @@ describe("set Username", () => {
             })
             .then((res: any) => {
                 expect(res.errors[0].message).toMatch(
-                    CustomErrorMessage.USERNAME_NO_EXIST_TOO_SHORT
+                    CustomErrorMessage.NAME_LENGTH
                 );
             });
     });

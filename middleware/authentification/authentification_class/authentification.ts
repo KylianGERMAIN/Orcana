@@ -2,7 +2,12 @@ import { User } from "../../../helpers/interface/userInterface";
 import {
     check_valid_email,
     compare_password,
-} from "../../../helpers/validator/login";
+} from "../../../helpers/validator/authentification/login";
+import {
+    check_email_exist,
+    check_password,
+    check_username,
+} from "../../../helpers/validator/authentification/register";
 
 export class Authentification {
     _user: User;
@@ -41,7 +46,10 @@ export class Authentification {
     }
 
     public check_valid_email = check_valid_email;
+    public check_email_exist = check_email_exist;
+    public check_password = check_password;
     public compare_password = compare_password;
+    public check_username = check_username;
     public reset_token() {
         this._acces_token = "";
         this._refresh_token = "";

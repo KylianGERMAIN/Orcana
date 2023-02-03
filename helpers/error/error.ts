@@ -5,7 +5,7 @@ export enum CustomErrorMessage {
 
     /**     Name     **/
     NAME_LENGTH = "Your name length must be at least 7 characters",
-    USERNAME_NO_EXIST_TOO_SHORT = "username does not exist or is too short",
+    USERNAME_NO_EXIST = "username does not exist",
 
     /**     Email     **/
     INVALID_EMAIL = "Your email is not valid",

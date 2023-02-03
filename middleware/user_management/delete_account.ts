@@ -4,6 +4,7 @@ import { Token } from "../../helpers/utils";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { set_log } from "../log/set_log";
 import { delete_user } from "../../helpers/database/userRequest";
+import { User_management } from "./user_management_class/user_management";
 
 export async function delete_account(context: any) {
     const user: User = {
@@ -37,6 +38,7 @@ export async function delete_account(context: any) {
     };
 
     const time = new Date();
+    const user_management = new User_management(user);
 
     try {
         const token: JWT = (await Token.decode_refresh_token(
@@ -44,13 +46,27 @@ export async function delete_account(context: any) {
             process.env.ACCESS_TOKEN_SECRET as string
         )) as JWT;
         if (token) {
-            user.id = token.payload.id;
-            await delete_user({ _id: user.id });
-            set_log(time, user.id, "info", _error, query, http_info);
+            user_management.user.id = token.payload.id;
+            await delete_user({ _id: user_management.user.id });
+            set_log(
+                time,
+                user_management.user.id,
+                "info",
+                _error,
+                query,
+                http_info
+            );
         }
     } catch (e: any) {
         _error = e;
-        set_log(time, user.id, "error", _error, query, http_info);
+        set_log(
+            time,
+            user_management.user.id,
+            "error",
+            _error,
+            query,
+            http_info
+        );
     }
     return {
         error: _error,
