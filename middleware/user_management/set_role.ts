@@ -6,7 +6,6 @@ import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { Token } from "../../helpers/utils";
-import { compare_role } from "../../helpers/validator/user_management/role";
 import { set_log } from "../log/set_log";
 import { User_management } from "./user_management_class/user_management";
 
