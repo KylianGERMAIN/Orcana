@@ -1,9 +1,10 @@
-import { Encrypt, RequestContext, Token } from "../../helpers/utils";
+import { RequestContext, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { User } from "../../helpers/interface/userInterface";
 import { set_log } from "../log/set_log";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { login_checking } from "../../helpers/validator/login";
+import { Authentification } from "./authentification_class/authentification";
+import { find_user_with_email } from "../../helpers/database/userRequest";
 
 export async function login(email: string, password: string, context: any) {
     let _error: ErrorResponse = {
@@ -37,26 +38,48 @@ export async function login(email: string, password: string, context: any) {
         query: context.body.query ? context.body.query : "",
     };
 
-    let acces_token = "";
-    let refresh_token = "";
     const time = new Date();
+    const authentification = new Authentification(user);
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
-        const result = await login_checking(user);
-        user.id = result._id.toString();
-        user.password = await Encrypt.crypt_password(password);
-        acces_token = await Token.generate_access_token(user);
-        refresh_token = await Token.generate_refresh_token(user);
-        set_log(time, user.id, "info", _error, query, http_info);
+        await authentification.check_valid_email(authentification);
+        const result = await find_user_with_email(user);
+        await authentification.compare_password(
+            authentification,
+            result.password
+        );
+        authentification.user.id = result._id.toString();
+        authentification.acces_token = await Token.generate_access_token(
+            authentification.user
+        );
+        authentification.refresh_token = await Token.generate_refresh_token(
+            authentification.user
+        );
+        set_log(
+            time,
+            authentification.user.id,
+            "info",
+            _error,
+            query,
+            http_info
+        );
     } catch (e: any) {
+        authentification.reset_token();
         _error = e;
-        set_log(time, user.id, "error", _error, query, http_info);
+        set_log(
+            time,
+            authentification.user.id,
+            "error",
+            _error,
+            query,
+            http_info
+        );
     }
     return {
         error: _error,
-        refresh_token: refresh_token,
-        access_token: acces_token,
+        refresh_token: authentification.refresh_token,
+        access_token: authentification.acces_token,
         expires_in: "1800s",
         token_type: "Bearer",
     };

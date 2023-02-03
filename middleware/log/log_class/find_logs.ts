@@ -10,7 +10,7 @@ export async function find_logs(classLog: Log) {
             classLog.v_log_length = docs.length;
             classLog.v_operation_names = docs;
         })
-        .catch((e) => {
+        .catch(() => {
             throw new GraphQLError(CustomErrorMessage.FIND_DATABASE, {
                 extensions: {
                     status: StatusCodes.INTERNAL_SERVER_ERROR,
