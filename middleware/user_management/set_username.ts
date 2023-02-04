@@ -1,7 +1,7 @@
 import { GraphQLError } from "graphql";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
-import { Token } from "../../helpers/utils";
+import { RequestContext, Token } from "../../helpers/utils";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { set_log } from "../log/set_log";
@@ -47,6 +47,7 @@ export async function set_username(context: any, name: string) {
     const authentification = new Authentification(user);
 
     try {
+        RequestContext.check_operation_name(context.body.operationName);
         if (authentification.user.username) {
             await authentification.check_username();
             const token: JWT = (await Token.decode_refresh_token(

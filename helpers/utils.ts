@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import { User } from "./interface/userInterface";
@@ -80,3 +81,9 @@ export const Token = {
         }
     },
 };
+
+export function valid_mail(mail: string) {
+    return /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$/.test(
+        mail
+    );
+}

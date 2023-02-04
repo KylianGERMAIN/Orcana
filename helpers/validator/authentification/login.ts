@@ -1,9 +1,8 @@
 import { GraphQLError } from "graphql";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
-import { valid_mail } from "../../../tools/input_tools";
 import { CustomErrorMessage } from "../../error/error";
 import { Authentification } from "../../../middleware/authentification/authentification_class/authentification";
-import { Encrypt } from "../../utils";
+import { Encrypt, valid_mail } from "../../utils";
 
 export function check_valid_email(this: Authentification) {
     if (valid_mail(this.user.email) == false) {

@@ -26,5 +26,6 @@ export enum CustomErrorMessage {
     DELETE_USER_DATABASE = "An error when deleting an user in the database",
 
     /**     Role     **/
+    NO_ROLE = "This role does not exist",
     CANT_ASSIGN_ROLE = "You cannot assign this role to this user",
 }

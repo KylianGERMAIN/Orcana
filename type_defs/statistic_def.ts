@@ -4,6 +4,7 @@ const statistic_response = gql`
     type logs_statistic_response {
         total_request: Int
         operationName: [String]
+        error: Error
     }
 `;
 

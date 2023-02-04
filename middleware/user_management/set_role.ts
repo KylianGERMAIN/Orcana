@@ -5,7 +5,7 @@ import {
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
-import { Token } from "../../helpers/utils";
+import { RequestContext, Token } from "../../helpers/utils";
 import { set_log } from "../log/set_log";
 import { User_management } from "./user_management_class/user_management";
 
@@ -51,6 +51,7 @@ export async function set_role(context: any, id: string, role: string) {
     const user_management = new User_management(user);
 
     try {
+        RequestContext.check_operation_name(context.body.operationName);
         const token: JWT = (await Token.decode_refresh_token(
             context.headers.authorization,
             process.env.ACCESS_TOKEN_SECRET as string
@@ -59,7 +60,7 @@ export async function set_role(context: any, id: string, role: string) {
             user_management.user.id = token.payload.id;
             const userIn: any = await find_user_with_id(user_management.user);
             user_management.user.role = userIn.role;
-            toUser.email = await(await find_user_with_id(toUser)).email;
+            toUser.email = await (await find_user_with_id(toUser)).email;
             await user_management.compare_role(
                 toUser.role ? toUser.role : "undefined"
             );

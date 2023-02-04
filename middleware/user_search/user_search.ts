@@ -1,12 +1,12 @@
+import { find_user_with_role } from "../../helpers/database/userRequest";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
+import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { RequestContext, Token } from "../../helpers/utils";
-import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { set_log } from "../log/set_log";
-import { delete_user } from "../../helpers/database/userRequest";
-import { User_management } from "./user_management_class/user_management";
+import { User_search } from "./user_search_class/user_search";
 
-export async function delete_account(context: any) {
+export async function user_search(context: any, role: any) {
     const user: User = {
         email: "",
         username: "",
@@ -14,6 +14,7 @@ export async function delete_account(context: any) {
         role: "",
         id: "",
     };
+
     let _error: ErrorResponse = {
         message: "",
         extensions: {
@@ -38,38 +39,37 @@ export async function delete_account(context: any) {
     };
 
     const time = new Date();
-    const user_management = new User_management(user);
+    const user_search = new User_search(role);
+    const users: User[] = [];
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
         const token: JWT = (await Token.decode_refresh_token(
             context.headers.authorization,
-            process.env.ACCESS_TOKEN_SECRET as string
+            process.env.REFRESH_TOKEN_SECRET as string
         )) as JWT;
         if (token) {
-            user_management.user.id = token.payload.id;
-            await delete_user({ _id: user_management.user.id });
-            set_log(
-                time,
-                user_management.user.id,
-                "info",
-                _error,
-                query,
-                http_info
-            );
+            user.id = token.payload.id;
+            await user_search.check_role();
+            const result = await find_user_with_role(role);
+            for (let i = 0; i != result.length; i++) {
+                const user_data: User = {
+                    email: result[i].email,
+                    username: result[i].username,
+                    password: "",
+                    role: "",
+                    id: result[i]._id.toString(),
+                };
+                users.push(user_data);
+            }
+            set_log(time, user.id, "info", _error, query, http_info);
         }
     } catch (e: any) {
         _error = e;
-        set_log(
-            time,
-            user_management.user.id,
-            "error",
-            _error,
-            query,
-            http_info
-        );
+        set_log(time, user.id, "error", _error, query, http_info);
     }
     return {
         error: _error,
+        data: { users: users },
     };
 }

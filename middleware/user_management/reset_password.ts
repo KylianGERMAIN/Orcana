@@ -3,7 +3,7 @@ import { ReasonPhrases } from "http-status-codes/build/cjs/reason-phrases";
 import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
-import { Encrypt, Token } from "../../helpers/utils";
+import { Encrypt, RequestContext, Token } from "../../helpers/utils";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { set_log } from "../log/set_log";
 import { CustomErrorMessage } from "../../helpers/error/error";
@@ -48,6 +48,7 @@ export async function reset_password(context: any, newPassword: string) {
     const authentification = new Authentification(user);
 
     try {
+        RequestContext.check_operation_name(context.body.operationName);
         const token: JWT = (await Token.decode_refresh_token(
             context.headers.authorization,
             process.env.ACCESS_TOKEN_SECRET as string

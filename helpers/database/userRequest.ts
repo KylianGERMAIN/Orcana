@@ -5,6 +5,21 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { User } from "../interface/userInterface";
 import { CustomErrorMessage } from "../error/error";
 
+export async function find_user_with_role(_role: string) {
+    const UserModel = mongoose.model("users", UserSchema);
+    const res = await UserModel.find({ role: _role }).clone();
+    if (res == null) {
+        throw new GraphQLError(CustomErrorMessage.NO_USER, {
+            extensions: {
+                status: StatusCodes.FORBIDDEN,
+                error: ReasonPhrases.FORBIDDEN,
+                field: "role",
+            },
+        });
+    }
+    return res;
+}
+
 export async function find_user_with_email(user: User) {
     const UserModel = mongoose.model("users", UserSchema);
     const res = await UserModel.findOne({ email: user.email }).clone();
