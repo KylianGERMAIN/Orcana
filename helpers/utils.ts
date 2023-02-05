@@ -44,7 +44,7 @@ export const Token = {
             }
         );
     },
-    decode_refresh_token: async (token: string, key: string) => {
+    decode_token: async (token: string, key: string) => {
         if (token == undefined) {
             throw new GraphQLError(CustomErrorMessage.NO_AUTHORIZATION, {
                 extensions: {

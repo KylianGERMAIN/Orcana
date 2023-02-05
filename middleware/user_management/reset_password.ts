@@ -46,7 +46,7 @@ export async function reset_password(context: any, newPassword: string) {
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
-        const token: JWT = (await Token.decode_refresh_token(
+        const token: JWT = (await Token.decode_token(
             context.headers.authorization,
             process.env.ACCESS_TOKEN_SECRET as string
         )) as JWT;

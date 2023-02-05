@@ -47,7 +47,7 @@ export async function set_username(context: any, name: string) {
         RequestContext.check_operation_name(context.body.operationName);
         if (authentification.user.username) {
             await authentification.check_username();
-            const token: JWT = (await Token.decode_refresh_token(
+            const token: JWT = (await Token.decode_token(
                 context.headers.authorization,
                 process.env.ACCESS_TOKEN_SECRET as string
             )) as JWT;

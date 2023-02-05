@@ -42,7 +42,7 @@ export async function refresh_access_token(context: any) {
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
-        const token: JWT = (await Token.decode_refresh_token(
+        const token: JWT = (await Token.decode_token(
             context.headers.authorization,
             process.env.REFRESH_TOKEN_SECRET as string
         )) as JWT;

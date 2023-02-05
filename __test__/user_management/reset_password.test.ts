@@ -32,7 +32,7 @@ describe("reset Password", () => {
             .then((res: any) => {
                 return res.json();
             })
-            .then((res: any) => {
+            .then(() => {
                 fetch("http://localhost:4000/graphql", {
                     method: "POST",
                     headers: {

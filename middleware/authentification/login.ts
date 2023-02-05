@@ -1,10 +1,8 @@
 import { RequestContext, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { User } from "../../helpers/interface/userInterface";
-import { set_log } from "../../helpers/database/set_log";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { Authentification } from "./authentification_class/authentification";
-import { find_user_with_email } from "../../helpers/database/userRequest";
 import { Database } from "../../helpers/database/database";
 
 export async function login(email: string, password: string, context: any) {

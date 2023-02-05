@@ -13,7 +13,7 @@ export function check_role(this: User_search) {
     }
 
     if (role_exists != true) {
-        throw new GraphQLError(CustomErrorMessage.NO_USER, {
+        throw new GraphQLError(CustomErrorMessage.NO_ROLE, {
             extensions: {
                 status: StatusCodes.NOT_FOUND,
                 error: ReasonPhrases.NOT_FOUND,

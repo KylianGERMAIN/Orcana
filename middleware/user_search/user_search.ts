@@ -48,9 +48,9 @@ export async function user_search(
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
-        const token: JWT = (await Token.decode_refresh_token(
+        const token: JWT = (await Token.decode_token(
             context.headers.authorization,
-            process.env.REFRESH_TOKEN_SECRET as string
+            process.env.ACCESS_TOKEN_SECRET as string
         )) as JWT;
         if (token) {
             user.id = token.payload.id;
