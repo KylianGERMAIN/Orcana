@@ -7,7 +7,7 @@
   </a>
 </p>
 
-### Orcana is a GraphQL admin panel
+### Orcana is a GraphQL API admin panel
 
 # Installation
 
