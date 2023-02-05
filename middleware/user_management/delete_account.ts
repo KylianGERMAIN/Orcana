@@ -2,9 +2,8 @@ import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { RequestContext, Token } from "../../helpers/utils";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { set_log } from "../log/set_log";
-import { delete_user } from "../../helpers/database/userRequest";
 import { User_management } from "./user_management_class/user_management";
+import { Database } from "../../helpers/database/database";
 
 export async function delete_account(context: any) {
     const user: User = {
@@ -39,6 +38,7 @@ export async function delete_account(context: any) {
 
     const time = new Date();
     const user_management = new User_management(user);
+    const db = new Database();
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
@@ -48,8 +48,8 @@ export async function delete_account(context: any) {
         )) as JWT;
         if (token) {
             user_management.user.id = token.payload.id;
-            await delete_user({ _id: user_management.user.id });
-            set_log(
+            await db.delete_user({ _id: user_management.user.id });
+            db.set_log(
                 time,
                 user_management.user.id,
                 "info",
@@ -60,7 +60,7 @@ export async function delete_account(context: any) {
         }
     } catch (e: any) {
         _error = e;
-        set_log(
+        db.set_log(
             time,
             user_management.user.id,
             "error",

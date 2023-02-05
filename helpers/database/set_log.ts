@@ -1,6 +1,6 @@
-import { ErrorResponse } from "../../helpers/interface/errorInterface";
-import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { LogModel } from "../../helpers/models/logModel";
+import { ErrorResponse } from "../interface/errorInterface";
+import { HttpInfo, QueryContent } from "../interface/logInterface";
+import { LogModel } from "../models/logModel";
 
 export async function set_log(
     time: Date,

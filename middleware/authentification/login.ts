@@ -1,10 +1,11 @@
 import { RequestContext, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { User } from "../../helpers/interface/userInterface";
-import { set_log } from "../log/set_log";
+import { set_log } from "../../helpers/database/set_log";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { Authentification } from "./authentification_class/authentification";
 import { find_user_with_email } from "../../helpers/database/userRequest";
+import { Database } from "../../helpers/database/database";
 
 export async function login(email: string, password: string, context: any) {
     let _error: ErrorResponse = {
@@ -40,11 +41,12 @@ export async function login(email: string, password: string, context: any) {
 
     const time = new Date();
     const authentification = new Authentification(user);
+    const db = new Database();
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
         await authentification.check_valid_email();
-        const result = await find_user_with_email(authentification.user);
+        const result = await db.find_user_with_email(authentification.user);
         await authentification.compare_password(result.password);
         authentification.user.id = result._id.toString();
         authentification.acces_token = await Token.generate_access_token(
@@ -53,7 +55,7 @@ export async function login(email: string, password: string, context: any) {
         authentification.refresh_token = await Token.generate_refresh_token(
             authentification.user
         );
-        set_log(
+        db.set_log(
             time,
             authentification.user.id,
             "info",
@@ -64,7 +66,7 @@ export async function login(email: string, password: string, context: any) {
     } catch (e: any) {
         authentification.reset_token();
         _error = e;
-        set_log(
+        db.set_log(
             time,
             authentification.user.id,
             "error",

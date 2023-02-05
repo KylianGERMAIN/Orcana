@@ -1,14 +1,12 @@
 import { User_search } from "./user_search";
 import { User } from "../../../helpers/interface/userInterface";
-import { find_user_with_username_and_role } from "../../../helpers/database/userRequest";
+import { Database } from "../../../helpers/database/database";
 
-export async function search_user_with_username_and_role(this: User_search) {
+export async function search_user(this: User_search, filtrer: any) {
     const users: User[] = [];
+    const db = new Database();
 
-    const result = await find_user_with_username_and_role(
-        this._role,
-        this._username
-    );
+    const result = await db.find_user(filtrer);
     for (let i = 0; i != result.length; i++) {
         const user_data: User = {
             email: result[i].email,

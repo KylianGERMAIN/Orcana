@@ -4,13 +4,9 @@ import { JWT, User } from "../../helpers/interface/userInterface";
 import { RequestContext, Token } from "../../helpers/utils";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { set_log } from "../log/set_log";
 import { CustomErrorMessage } from "../../helpers/error/error";
-import {
-    find_user_with_id,
-    update_user,
-} from "../../helpers/database/userRequest";
 import { Authentification } from "../authentification/authentification_class/authentification";
+import { Database } from "../../helpers/database/database";
 
 export async function set_username(context: any, name: string) {
     const user: User = {
@@ -45,6 +41,7 @@ export async function set_username(context: any, name: string) {
 
     const time = new Date();
     const authentification = new Authentification(user);
+    const db = new Database();
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
@@ -56,12 +53,14 @@ export async function set_username(context: any, name: string) {
             )) as JWT;
             if (token) {
                 authentification.user.id = token.payload.id;
-                const res: any = await find_user_with_id(authentification.user);
-                await update_user(
+                const res: any = await db.find_user_with_id(
+                    authentification.user
+                );
+                await db.update_user(
                     { id: res.id },
                     { username: authentification.user.username }
                 );
-                set_log(
+                db.set_log(
                     time,
                     authentification.user.id,
                     "info",
@@ -81,7 +80,7 @@ export async function set_username(context: any, name: string) {
         }
     } catch (e: any) {
         _error = e;
-        set_log(
+        db.set_log(
             time,
             authentification.user.id,
             "error",

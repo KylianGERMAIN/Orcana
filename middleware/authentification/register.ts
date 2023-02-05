@@ -3,9 +3,8 @@ import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { User } from "../../helpers/interface/userInterface";
 import { UserModel } from "../../helpers/models/userModel";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { set_log } from "../log/set_log";
-import { find_user_with_email } from "../../helpers/database/userRequest";
 import { Authentification } from "./authentification_class/authentification";
+import { Database } from "../../helpers/database/database";
 
 export async function register(
     { email, username, password }: User,
@@ -43,6 +42,7 @@ export async function register(
 
     const time = new Date();
     const authentification = new Authentification(user);
+    const db = new Database();
 
     try {
         await RequestContext.check_operation_name(context.body.operationName);
@@ -53,7 +53,7 @@ export async function register(
         authentification.user.password = await Encrypt.crypt_password(password);
         const newUser = await new UserModel(authentification.user);
         await newUser.save();
-        const res: any = await find_user_with_email(authentification.user);
+        const res: any = await db.find_user_with_email(authentification.user);
         authentification.user.id = res._id.toString();
         authentification.acces_token = await Token.generate_access_token(
             authentification.user
@@ -61,7 +61,7 @@ export async function register(
         authentification.refresh_token = await Token.generate_refresh_token(
             authentification.user
         );
-        set_log(
+        db.set_log(
             time,
             authentification.user.id,
             "info",
@@ -72,7 +72,7 @@ export async function register(
     } catch (e: any) {
         authentification.reset_token();
         _error = e;
-        set_log(
+        db.set_log(
             time,
             authentification.user.id,
             "error",

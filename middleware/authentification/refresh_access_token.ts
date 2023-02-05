@@ -1,8 +1,8 @@
+import { Database } from "../../helpers/database/database";
 import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { RequestContext, Token } from "../../helpers/utils";
-import { set_log } from "../log/set_log";
 import { Authentification } from "./authentification_class/authentification";
 
 export async function refresh_access_token(context: any) {
@@ -38,6 +38,7 @@ export async function refresh_access_token(context: any) {
 
     const time = new Date();
     const authentification = new Authentification(user);
+    const db = new Database();
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
@@ -50,7 +51,7 @@ export async function refresh_access_token(context: any) {
             authentification._acces_token = await Token.generate_access_token(
                 authentification.user
             );
-            set_log(
+            db.set_log(
                 time,
                 authentification.user.id,
                 "info",
@@ -62,7 +63,7 @@ export async function refresh_access_token(context: any) {
     } catch (e: any) {
         authentification.reset_token();
         _error = e;
-        set_log(
+        db.set_log(
             time,
             authentification.user.id,
             "error",

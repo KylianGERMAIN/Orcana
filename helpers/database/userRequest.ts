@@ -5,29 +5,12 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { User } from "../interface/userInterface";
 import { CustomErrorMessage } from "../error/error";
 
-export async function find_user_with_username_and_role(
-    _role: string,
-    _username: string
-) {
+export async function find_user(filter: object) {
     const UserModel = mongoose.model("users", UserSchema);
-    const res = await UserModel.find({
-        role: _role,
-        username: _username,
-    }).clone();
+    const res = await UserModel.find(filter).clone();
     return res;
 }
 
-export async function find_user_with_username(_username: string) {
-    const UserModel = mongoose.model("users", UserSchema);
-    const res = await UserModel.find({ username: _username }).clone();
-    return res;
-}
-
-export async function find_user_with_role(_role: string) {
-    const UserModel = mongoose.model("users", UserSchema);
-    const res = await UserModel.find({ role: _role }).clone();
-    return res;
-}
 
 export async function find_user_with_email(user: User) {
     const UserModel = mongoose.model("users", UserSchema);

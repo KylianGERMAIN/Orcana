@@ -5,13 +5,9 @@ import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { Encrypt, RequestContext, Token } from "../../helpers/utils";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { set_log } from "../log/set_log";
 import { CustomErrorMessage } from "../../helpers/error/error";
-import {
-    find_user_with_id,
-    update_user,
-} from "../../helpers/database/userRequest";
 import { Authentification } from "../authentification/authentification_class/authentification";
+import { Database } from "../../helpers/database/database";
 
 export async function reset_password(context: any, newPassword: string) {
     const user: User = {
@@ -46,6 +42,7 @@ export async function reset_password(context: any, newPassword: string) {
 
     const time = new Date();
     const authentification = new Authentification(user);
+    const db = new Database();
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
@@ -56,7 +53,7 @@ export async function reset_password(context: any, newPassword: string) {
         if (token) {
             authentification.user.id = token.payload.id;
             authentification.check_password();
-            const res: any = await find_user_with_id(authentification.user);
+            const res: any = await db.find_user_with_id(authentification.user);
             if (await Encrypt.compare_password(newPassword, res.password)) {
                 throw new GraphQLError(
                     CustomErrorMessage.NO_CHANGE_WITH_SAME_PASSWORD,
@@ -72,11 +69,11 @@ export async function reset_password(context: any, newPassword: string) {
                 authentification.user.password = await Encrypt.crypt_password(
                     newPassword
                 );
-                await update_user(
+                await db.update_user(
                     { id: authentification.user.id },
                     { password: authentification.user.password }
                 );
-                set_log(
+                db.set_log(
                     time,
                     authentification.user.id,
                     "info",
@@ -88,7 +85,7 @@ export async function reset_password(context: any, newPassword: string) {
         }
     } catch (e: any) {
         _error = e;
-        set_log(
+        db.set_log(
             time,
             authentification.user.id,
             "error",

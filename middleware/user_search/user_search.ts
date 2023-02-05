@@ -2,8 +2,8 @@ import { ErrorResponse } from "../../helpers/interface/errorInterface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
 import { JWT, User } from "../../helpers/interface/userInterface";
 import { RequestContext, Token } from "../../helpers/utils";
-import { set_log } from "../log/set_log";
 import { User_search } from "./user_search_class/user_search";
+import { Database } from "../../helpers/database/database";
 
 export async function user_search(
     context: any,
@@ -43,6 +43,7 @@ export async function user_search(
 
     const time = new Date();
     const user_search = new User_search(role, username);
+    const db = new Database();
     let users: User[] = [];
 
     try {
@@ -55,16 +56,24 @@ export async function user_search(
             user.id = token.payload.id;
             if (role && username) {
                 await user_search.check_role();
-                users = await user_search.search_user_with_username_and_role();
+                users = await user_search.search_user({
+                    role: user_search._role,
+                    username: user_search._username,
+                });
             } else if (role) {
                 await user_search.check_role();
-                users = await user_search.search_user_with_role();
-            } else users = await user_search.search_user_with_username();
-            set_log(time, user.id, "info", _error, query, http_info);
+                users = await user_search.search_user({
+                    role: user_search._role,
+                });
+            } else
+                users = await user_search.search_user({
+                    username: user_search._username,
+                });
+            db.set_log(time, user.id, "info", _error, query, http_info);
         }
     } catch (e: any) {
         _error = e;
-        set_log(time, user.id, "error", _error, query, http_info);
+        db.set_log(time, user.id, "error", _error, query, http_info);
     }
     return {
         error: _error,
