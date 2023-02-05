@@ -13,11 +13,20 @@ const search_response = gql`
         data: user_list
         error: Error
     }
+
+    type user_section {
+        user: user
+    }
+    type user_search_with_id_response {
+        data: user_section
+        error: Error
+    }
 `;
 
 const user_search_mutation = gql`
     type Mutation {
         user_search(role: String, username: String): user_search_response
+        user_search_with_id(user_id: String): user_search_with_id_response
     }
 `;
 
