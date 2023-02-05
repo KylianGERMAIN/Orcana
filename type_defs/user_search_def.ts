@@ -17,7 +17,7 @@ const search_response = gql`
 
 const user_search_mutation = gql`
     type Mutation {
-        user_search(role: String): user_search_response
+        user_search(role: String, username: String): user_search_response
     }
 `;
 
