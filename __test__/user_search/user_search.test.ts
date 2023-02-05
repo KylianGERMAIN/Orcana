@@ -179,7 +179,6 @@ describe("find user", () => {
                 return res.json();
             })
             .then((res: any) => {
-                console.log(res);
                 expect(res.errors[0].message).toMatch(
                     CustomErrorMessage.NO_ROLE
                 );
