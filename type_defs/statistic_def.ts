@@ -19,4 +19,14 @@ const statistic_mutation = gql`
     }
 `;
 
-export const statistic = [statistic_response, statistic_mutation];
+const statistic_subscription = gql`
+    type Subscription {
+        numberIncremented: Int
+    }
+`;
+
+export const statistic = [
+    statistic_response,
+    statistic_mutation,
+    statistic_subscription,
+];
