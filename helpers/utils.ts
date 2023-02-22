@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
-import { User } from "./interface/userInterface";
+import { User } from "./interface/user_interface";
 import { GraphQLError } from "graphql";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { CustomErrorMessage } from "./error/error";

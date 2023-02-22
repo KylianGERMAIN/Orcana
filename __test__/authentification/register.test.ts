@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { User } from "../../helpers/interface/userInterface";
+import { User } from "../../helpers/interface/user_interface";
 import { CustomErrorMessage } from "../../helpers/error/error";
 
 import dotenv from "dotenv";

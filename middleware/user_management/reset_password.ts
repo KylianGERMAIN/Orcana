@@ -1,10 +1,10 @@
 import { GraphQLError } from "graphql";
 import { ReasonPhrases } from "http-status-codes/build/cjs/reason-phrases";
 import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
-import { ErrorResponse } from "../../helpers/interface/errorInterface";
-import { JWT, User } from "../../helpers/interface/userInterface";
+import { ErrorResponse } from "../../helpers/interface/error_interface";
+import { JWT, User } from "../../helpers/interface/user_interface";
 import { Encrypt, RequestContext, Token } from "../../helpers/utils";
-import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
+import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
 import { CustomErrorMessage } from "../../helpers/error/error";
 import { Authentification } from "../authentification/authentification_class/authentification";
 import { Database } from "../../helpers/database/database";

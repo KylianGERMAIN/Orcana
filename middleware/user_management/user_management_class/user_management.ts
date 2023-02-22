@@ -1,4 +1,4 @@
-import { User } from "../../../helpers/interface/userInterface";
+import { User } from "../../../helpers/interface/user_interface";
 import { compare_role } from "../../../helpers/validator/user_management/role";
 
 export class User_management {

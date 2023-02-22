@@ -1,8 +1,8 @@
 import { Database } from "../../helpers/database/database";
-import { update_user } from "../../helpers/database/userRequest";
-import { ErrorResponse } from "../../helpers/interface/errorInterface";
-import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
-import { JWT, User } from "../../helpers/interface/userInterface";
+import { update_user } from "../../helpers/database/user_request";
+import { ErrorResponse } from "../../helpers/interface/error_interface";
+import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
+import { JWT, User } from "../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../helpers/utils";
 import { User_management } from "./user_management_class/user_management";
 

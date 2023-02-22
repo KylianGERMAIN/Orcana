@@ -1,7 +1,7 @@
 import { RequestContext, Token } from "../../helpers/utils";
-import { ErrorResponse } from "../../helpers/interface/errorInterface";
-import { User } from "../../helpers/interface/userInterface";
-import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
+import { ErrorResponse } from "../../helpers/interface/error_interface";
+import { User } from "../../helpers/interface/user_interface";
+import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
 import { Authentification } from "./authentification_class/authentification";
 import { Database } from "../../helpers/database/database";
 

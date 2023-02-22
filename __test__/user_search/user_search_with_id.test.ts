@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { User } from "../../helpers/interface/userInterface";
+import { User } from "../../helpers/interface/user_interface";
 
 import dotenv from "dotenv";
 import fetch from "node-fetch";

@@ -1,15 +1,19 @@
 import { ErrorResponse } from "../../helpers/interface/error_interface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
-import { JWT, User } from "../../helpers/interface/user_interface";
+import { JWT } from "../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../helpers/utils";
 import { Database } from "../../helpers/database/database";
+import { Chat } from "../../helpers/interface/chat_interface";
 
-export async function user_search_with_id(context: any, user_id: string) {
-    const user: User = {
-        email: "",
-        username: "",
-        password: "",
-        id: "",
+export async function create_chat(
+    receiver_id: string,
+    message: string,
+    context: any
+) {
+    const chat: Chat = {
+        sender_id: "",
+        receiver_id: receiver_id,
+        message: message,
     };
 
     let _error: ErrorResponse = {
@@ -37,7 +41,6 @@ export async function user_search_with_id(context: any, user_id: string) {
 
     const time = new Date();
     const db = new Database();
-    let result;
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
@@ -46,21 +49,17 @@ export async function user_search_with_id(context: any, user_id: string) {
             process.env.ACCESS_TOKEN_SECRET as string
         )) as unknown as JWT;
         if (token) {
-            user.id = token.payload.id;
-            result = await db.find_user_with_id({
-                email: "",
-                username: "",
-                password: "",
-                id: user_id,
-            });
-            db.set_log(time, user.id, "info", _error, query, http_info);
+            chat.sender_id = token.payload.id;
+            await db.create_chat(chat);
+            db.set_log(time, chat.sender_id, "info", _error, query, http_info);
         }
     } catch (e: any) {
         _error = e;
-        db.set_log(time, user.id, "error", _error, query, http_info);
+        db.set_log(time, chat.sender_id, "error", _error, query, http_info);
     }
     return {
         error: _error,
-        data: { user: result },
+        receiver_id: chat.receiver_id,
+        message: chat.message,
     };
 }

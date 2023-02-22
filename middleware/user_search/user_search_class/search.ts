@@ -1,5 +1,5 @@
 import { User_search } from "./user_search";
-import { User } from "../../../helpers/interface/userInterface";
+import { User } from "../../../helpers/interface/user_interface";
 import { Database } from "../../../helpers/database/database";
 
 export async function search_user(this: User_search, filtrer: any) {

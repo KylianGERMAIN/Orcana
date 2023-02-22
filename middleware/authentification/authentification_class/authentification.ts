@@ -1,4 +1,4 @@
-import { User } from "../../../helpers/interface/userInterface";
+import { User } from "../../../helpers/interface/user_interface";
 import {
     check_valid_email,
     compare_password,

@@ -1,4 +1,4 @@
-import { ErrorResponse } from "../../helpers/interface/errorInterface";
+import { ErrorResponse } from "../../helpers/interface/error_interface";
 import { Log } from "./log_class/log";
 
 export async function logs_statistic(
