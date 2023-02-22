@@ -1,6 +1,4 @@
-import { gql } from "apollo-server-express";
-
-const statistic_response = gql`
+const statistic_response = `#graphql
     type logs_statistic_response {
         total_request: Int
         operationName: [String]
@@ -8,21 +6,21 @@ const statistic_response = gql`
     }
 `;
 
-const statistic_mutation = gql`
-    type Mutation {
-        logs_statistic(
-            month: Int
-            year: Int
-            day: Int
-            level: String
-        ): logs_statistic_response
-    }
+const statistic_mutation = `#graphql
+  type Mutation {
+    logs_statistic(
+      month: Int
+      year: Int
+      day: Int
+      level: String
+    ): logs_statistic_response
+  }
 `;
 
-const statistic_subscription = gql`
-    type Subscription {
-        numberIncremented: Int
-    }
+const statistic_subscription = `#graphql
+  type Subscription {
+    numberIncremented: Int
+  }
 `;
 
 export const statistic = [

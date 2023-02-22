@@ -1,6 +1,4 @@
-import { gql } from "apollo-server-express";
-
-const authentification_response = gql`
+const authentification_response = `#graphql
     type auth_response {
         refresh_token: String
         access_token: String
@@ -17,14 +15,14 @@ const authentification_response = gql`
     }
 `;
 
-const authentification_query = gql`
+const authentification_query = `#graphql
     type Query {
         default_post: String
         refresh_access_token: refresh_access_token_response
     }
 `;
 
-const authentification_mutation = gql`
+const authentification_mutation = `#graphql
     type Mutation {
         register(
             email: String
@@ -36,7 +34,7 @@ const authentification_mutation = gql`
 `;
 
 export const authentification = [
-    authentification_response,
-    authentification_query,
-    authentification_mutation,
+  authentification_response,
+  authentification_query,
+  authentification_mutation,
 ];

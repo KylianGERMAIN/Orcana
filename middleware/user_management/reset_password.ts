@@ -52,7 +52,7 @@ export async function reset_password(context: any, newPassword: string) {
         )) as JWT;
         if (token) {
             authentification.user.id = token.payload.id;
-            authentification.check_password();
+            await authentification.check_password();
             const res: any = await db.find_user_with_id(authentification.user);
             if (await Encrypt.compare_password(newPassword, res.password)) {
                 throw new GraphQLError(

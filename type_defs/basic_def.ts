@@ -1,16 +1,14 @@
-import { gql } from "apollo-server-express";
+const basic_response = `#graphql
+  type Error {
+    message: String
+  }
 
-const basic_response = gql`
-    type Error {
-        message: String
-    }
-
-    type basic_response {
-        error: Error
-    }
+  type basic_response {
+    error: Error
+  }
 `;
 
-const basic_query = gql`
+const basic_query = `#graphql
     type Query {
         default_post: String
     }
