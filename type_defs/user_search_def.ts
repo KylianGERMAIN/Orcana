@@ -1,6 +1,4 @@
-import { gql } from "apollo-server-express";
-
-const search_response = gql`
+const search_response = `#graphql
     type user {
         id: String
         email: String
@@ -23,7 +21,7 @@ const search_response = gql`
     }
 `;
 
-const user_search_mutation = gql`
+const user_search_mutation = `#graphql
     type Mutation {
         user_search(role: String, username: String): user_search_response
         user_search_with_id(user_id: String): user_search_with_id_response

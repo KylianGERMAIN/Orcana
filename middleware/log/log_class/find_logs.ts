@@ -1,11 +1,12 @@
 import { GraphQLError } from "graphql";
 import { StatusCodes, ReasonPhrases } from "http-status-codes";
 import { CustomErrorMessage } from "../../../helpers/error/error";
-import { LogModel } from "../../../helpers/models/logModel";
+import { log_model } from "../../../helpers/models/log_model";
 import { Log } from "./log";
 
 export async function find_logs(classLog: Log) {
-    await LogModel.find({})
+    await log_model
+        .find({})
         .then((docs: any) => {
             classLog.v_log_length = docs.length;
             classLog.v_operation_names = docs;

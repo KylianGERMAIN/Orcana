@@ -1,12 +1,12 @@
-import { ErrorResponse } from "../../helpers/interface/errorInterface";
-import { JWT, User } from "../../helpers/interface/userInterface";
+import { ErrorResponse } from "../../helpers/interface/error_interface";
+import { JWT, IUser } from "../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../helpers/utils";
-import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
+import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
 import { User_management } from "./user_management_class/user_management";
 import { Database } from "../../helpers/database/database";
 
 export async function delete_account(context: any) {
-    const user: User = {
+    const user: IUser = {
         email: "",
         username: "",
         password: "",

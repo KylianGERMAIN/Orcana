@@ -1,13 +1,13 @@
 import { Encrypt, RequestContext, Token } from "../../helpers/utils";
-import { ErrorResponse } from "../../helpers/interface/errorInterface";
-import { User } from "../../helpers/interface/userInterface";
-import { UserModel } from "../../helpers/models/userModel";
-import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
+import { ErrorResponse } from "../../helpers/interface/error_interface";
+import { IUser } from "../../helpers/interface/user_interface";
+import { user_model } from "../../helpers/models/user_model";
+import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
 import { Authentification } from "./authentification_class/authentification";
 import { Database } from "../../helpers/database/database";
 
 export async function register(
-    { email, username, password }: User,
+    { email, username, password }: IUser,
     context: any
 ) {
     let _error: ErrorResponse = {
@@ -18,7 +18,7 @@ export async function register(
             field: "",
         },
     };
-    const user: User = {
+    const user: IUser = {
         email: email,
         username: username,
         password: password,
@@ -51,7 +51,7 @@ export async function register(
         await authentification.check_password();
         await authentification.check_username();
         authentification.user.password = await Encrypt.crypt_password(password);
-        const newUser = await new UserModel(authentification.user);
+        const newUser = await new user_model(authentification.user);
         await newUser.save();
         const res: any = await db.find_user_with_email(authentification.user);
         authentification.user.id = res._id.toString();

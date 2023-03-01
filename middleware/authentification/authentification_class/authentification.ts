@@ -1,4 +1,4 @@
-import { User } from "../../../helpers/interface/userInterface";
+import { IUser } from "../../../helpers/interface/user_interface";
 import {
     check_valid_email,
     compare_password,
@@ -10,12 +10,12 @@ import {
 } from "../../../helpers/validator/authentification/register";
 
 export class Authentification {
-    _user: User;
+    _user: IUser;
 
     _acces_token: string;
     _refresh_token: string;
 
-    constructor(user: User) {
+    constructor(user: IUser) {
         this._user = user;
         this._acces_token = "";
         this._refresh_token = "";
@@ -25,7 +25,7 @@ export class Authentification {
         return this._user;
     }
 
-    set user(user: User) {
+    set user(user: IUser) {
         this._user = user;
     }
 

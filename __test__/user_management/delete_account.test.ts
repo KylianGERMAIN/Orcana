@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { User } from "../../helpers/interface/userInterface";
+import { IUser } from "../../helpers/interface/user_interface";
 
 import dotenv from "dotenv";
 import fetch from "node-fetch";
@@ -28,7 +28,7 @@ dotenv.config({ path: `.env.test` });
 
 describe("deleteAccount", () => {
     test("Success", () => {
-        const user: User = {
+        const user: IUser = {
             id: "",
             email: "test@hotmail.com",
             username: "test_test",

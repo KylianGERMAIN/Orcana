@@ -1,18 +1,11 @@
-import { Database } from "../../helpers/database/database";
 import { ErrorResponse } from "../../helpers/interface/error_interface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
-import { JWT, IUser } from "../../helpers/interface/user_interface";
+import { JWT } from "../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../helpers/utils";
-import { Authentification } from "./authentification_class/authentification";
+import { Database } from "../../helpers/database/database";
+import { IChat } from "../../helpers/interface/chat_interface";
 
-export async function refresh_access_token(context: any) {
-    const user: IUser = {
-        email: "",
-        username: "",
-        password: "",
-        role: "",
-        id: "",
-    };
+export async function get_chat(context: any) {
     let _error: ErrorResponse = {
         message: "",
         extensions: {
@@ -21,6 +14,8 @@ export async function refresh_access_token(context: any) {
             field: "",
         },
     };
+
+    let chats: IChat[] = [];
 
     const http_info: HttpInfo = {
         status: "200",
@@ -37,23 +32,19 @@ export async function refresh_access_token(context: any) {
     };
 
     const time = new Date();
-    const authentification = new Authentification(user);
     const db = new Database();
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
         const token: JWT = (await Token.decode_token(
             context.headers.authorization,
-            process.env.REFRESH_TOKEN_SECRET as string
-        )) as JWT;
+            process.env.ACCESS_TOKEN_SECRET as string
+        )) as unknown as JWT;
         if (token) {
-            authentification.user.id = token.payload.id;
-            authentification._acces_token = await Token.generate_access_token(
-                authentification.user
-            );
+            chats = await db.get_chat(token.payload.id);
             db.set_log(
                 time,
-                authentification.user.id,
+                token.payload.id,
                 "info",
                 _error,
                 query,
@@ -61,21 +52,11 @@ export async function refresh_access_token(context: any) {
             );
         }
     } catch (e: any) {
-        authentification.reset_token();
         _error = e;
-        db.set_log(
-            time,
-            authentification.user.id,
-            "error",
-            _error,
-            query,
-            http_info
-        );
+        db.set_log(time, "", "error", _error, query, http_info);
     }
     return {
         error: _error,
-        accessToken: authentification._acces_token,
-        expires_in: "1800s",
-        tokenType: "Bearer",
+        chats: chats,
     };
 }

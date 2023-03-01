@@ -1,16 +1,16 @@
 import { GraphQLError } from "graphql";
 import { ReasonPhrases } from "http-status-codes/build/cjs/reason-phrases";
 import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
-import { ErrorResponse } from "../../helpers/interface/errorInterface";
-import { JWT, User } from "../../helpers/interface/userInterface";
+import { ErrorResponse } from "../../helpers/interface/error_interface";
+import { JWT, IUser } from "../../helpers/interface/user_interface";
 import { Encrypt, RequestContext, Token } from "../../helpers/utils";
-import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
+import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
 import { CustomErrorMessage } from "../../helpers/error/error";
 import { Authentification } from "../authentification/authentification_class/authentification";
 import { Database } from "../../helpers/database/database";
 
 export async function reset_password(context: any, newPassword: string) {
-    const user: User = {
+    const user: IUser = {
         email: "",
         username: "",
         password: "",
@@ -52,7 +52,7 @@ export async function reset_password(context: any, newPassword: string) {
         )) as JWT;
         if (token) {
             authentification.user.id = token.payload.id;
-            authentification.check_password();
+            await authentification.check_password();
             const res: any = await db.find_user_with_id(authentification.user);
             if (await Encrypt.compare_password(newPassword, res.password)) {
                 throw new GraphQLError(

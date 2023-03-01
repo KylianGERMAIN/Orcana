@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { User } from "../../helpers/interface/userInterface";
+import { IUser } from "../../helpers/interface/user_interface";
 import { CustomErrorMessage } from "../../helpers/error/error";
 
 import dotenv from "dotenv";
@@ -29,7 +29,7 @@ dotenv.config({ path: `.env.test` });
 
 describe("Register", () => {
     test("Success", () => {
-        const user: User = {
+        const user: IUser = {
             id: "",
             email: "test@hotmail.com",
             username: "test_test",
@@ -78,7 +78,7 @@ describe("Register", () => {
     });
 
     test("email is not valid", () => {
-        const user: User = {
+        const user: IUser = {
             id: "",
             email: "hotmail.com",
             username: "test_test",
@@ -113,7 +113,7 @@ describe("Register", () => {
     });
 
     test("email already exist", () => {
-        const user: User = {
+        const user: IUser = {
             id: "",
             email: "login@hotmail.com",
             username: "test_test",
@@ -148,7 +148,7 @@ describe("Register", () => {
     });
 
     test("password to short", () => {
-        const user: User = {
+        const user: IUser = {
             id: "",
             email: "login11@hotmail.com",
             username: "test_test",

@@ -1,15 +1,15 @@
 import { GraphQLError } from "graphql";
-import { ErrorResponse } from "../../helpers/interface/errorInterface";
-import { JWT, User } from "../../helpers/interface/userInterface";
+import { ErrorResponse } from "../../helpers/interface/error_interface";
+import { JWT, IUser } from "../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../helpers/utils";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { HttpInfo, QueryContent } from "../../helpers/interface/logInterface";
+import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
 import { CustomErrorMessage } from "../../helpers/error/error";
 import { Authentification } from "../authentification/authentification_class/authentification";
 import { Database } from "../../helpers/database/database";
 
 export async function set_username(context: any, name: string) {
-    const user: User = {
+    const user: IUser = {
         email: "",
         username: name,
         password: "",

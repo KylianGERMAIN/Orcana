@@ -1,20 +1,26 @@
-import { ApolloServer } from "apollo-server-express";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { ApolloServer } from "@apollo/server";
 import express from "express";
 import mongoose from "mongoose";
 import { typeDefs } from "./type_defs/type_def";
 import { resolvers } from "./resolvers/resolver";
 import dotenv from "dotenv";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { WebSocketServer } from "ws";
+import { createServer } from "http";
+import { useServer } from "graphql-ws/lib/use/ws";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { expressMiddleware } from "@apollo/server/express4";
+import cors from "cors";
+import bodyParser from "body-parser";
 
 dotenv.config();
 
-async function listen(port: number) {
-    const app = express();
-    // app.set("trust proxy", true);
+const PORT = 4000;
 
+async function main() {
     const uri = process.env.LINK_DB;
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
     mongoose.set("strictQuery", false);
     mongoose
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -22,35 +28,50 @@ async function listen(port: number) {
         .connect(uri, { useUnifiedTopology: true, useNewUrlParser: true })
         .then(() => console.log("connected to newmango db"));
 
-    app.get("/", (req, res) => {
-        res.json({
-            data: "API is working...",
-        });
+    const schema = makeExecutableSchema({ typeDefs, resolvers });
+
+    const app = express();
+    const httpServer = createServer(app);
+    const context = (ctx: any) => ctx.req;
+
+    const wsServer = new WebSocketServer({
+        server: httpServer,
+        path: "/graphql",
     });
+    const serverCleanup = useServer({ schema }, wsServer);
 
     const server = new ApolloServer({
-        typeDefs,
-        resolvers,
-        context: ({ req }) => {
-            return req;
-        },
+        schema,
+        plugins: [
+            ApolloServerPluginDrainHttpServer({ httpServer }),
+            {
+                async serverWillStart() {
+                    return {
+                        async drainServer() {
+                            await serverCleanup.dispose();
+                        },
+                    };
+                },
+            },
+        ],
     });
 
     await server.start();
+    app.use(
+        "/graphql",
+        cors<cors.CorsRequest>(),
+        bodyParser.json(),
+        expressMiddleware(server, { context })
+    );
 
-    server.applyMiddleware({ app });
-
-    app.listen(port, () => {
-        console.log(` Server is running at http://localhost:${port}/graphql`);
+    httpServer.listen(PORT, () => {
+        console.log(
+            `🚀 Query endpoint ready at http://localhost:${PORT}/graphql`
+        );
+        console.log(
+            `🚀 Subscription endpoint ready at ws://localhost:${PORT}/graphql`
+        );
     });
 }
 
-async function main() {
-  try {
-    await listen(4000);
-  } catch (err) {
-    console.error("💀 Error starting the node server", err);
-  }
-}
-
-void main();
+main();

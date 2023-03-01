@@ -1,15 +1,15 @@
 import { GraphQLError } from "graphql";
-import mongoose from "mongoose";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { Authentification } from "../../../middleware/authentification/authentification_class/authentification";
 import { CustomErrorMessage } from "../../error/error";
-import { UserSchema } from "../../models/userModel";
+import { user_model } from "../../models/user_model";
 
 export async function check_email_exist(this: Authentification) {
-    const UserModel = mongoose.model("users", UserSchema);
-    const res = await UserModel.findOne({
-        email: this.user.email,
-    }).clone();
+    const res = await user_model
+        .findOne({
+            email: this.user.email,
+        })
+        .clone();
     if (res != null) {
         throw new GraphQLError(CustomErrorMessage.EMAIL_ALREADY_EXIST, {
             extensions: {
