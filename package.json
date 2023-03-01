@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "watch": "nodemon --watch './**/*.{ts,graphql}' --exec 'node --experimental-specifier-resolution=node --loader ts-node/esm' ./index.ts",
-        "dev": "npx kill-port 4000 && tsc-watch --onSuccess \"npm run watch\"",
+        "watch": "nodemon --delay 500ms --watch './**/*.{ts,graphql}' --exec 'node --experimental-specifier-resolution=node --loader ts-node/esm' ./index.ts",
+        "dev": "kill -9 $(lsof -i :4000) &>/dev/null | exit 0 && tsc-watch --onSuccess \"npm run watch\"",
         "test": "jest --runInBand --detectOpenHandles --forceExit"
     },
     "keywords": [],

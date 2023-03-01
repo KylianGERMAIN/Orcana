@@ -1,21 +1,19 @@
 import { ErrorResponse } from "../../helpers/interface/error_interface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
-import { JWT, IUser } from "../../helpers/interface/user_interface";
+import { JWT } from "../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../helpers/utils";
-import { User_search } from "./user_search_class/user_search";
 import { Database } from "../../helpers/database/database";
+import { IChat } from "../../helpers/interface/chat_interface";
 
-export async function user_search(
-    context: any,
-    role: string,
-    username: string
+export async function create_chat(
+    receiver_id: string,
+    message: string,
+    context: any
 ) {
-    const user: IUser = {
-        email: "",
-        username: "",
-        password: "",
-        role: "",
-        id: "",
+    const chat: IChat = {
+        sender_id: "",
+        receiver_id: receiver_id,
+        message: message,
     };
 
     let _error: ErrorResponse = {
@@ -42,41 +40,26 @@ export async function user_search(
     };
 
     const time = new Date();
-    const user_search = new User_search(role, username);
     const db = new Database();
-    let users: IUser[] = [];
 
     try {
         RequestContext.check_operation_name(context.body.operationName);
         const token: JWT = (await Token.decode_token(
             context.headers.authorization,
             process.env.ACCESS_TOKEN_SECRET as string
-        )) as JWT;
+        )) as unknown as JWT;
         if (token) {
-            user.id = token.payload.id;
-            if (role && username) {
-                await user_search.check_role();
-                users = await user_search.search_user({
-                    role: user_search._role,
-                    username: user_search._username,
-                });
-            } else if (role) {
-                await user_search.check_role();
-                users = await user_search.search_user({
-                    role: user_search._role,
-                });
-            } else
-                users = await user_search.search_user({
-                    username: user_search._username,
-                });
-            db.set_log(time, user.id, "info", _error, query, http_info);
+            chat.sender_id = token.payload.id;
+            await db.create_chat(chat);
+            db.set_log(time, chat.sender_id, "info", _error, query, http_info);
         }
     } catch (e: any) {
         _error = e;
-        db.set_log(time, user.id, "error", _error, query, http_info);
+        db.set_log(time, chat.sender_id, "error", _error, query, http_info);
     }
     return {
         error: _error,
-        data: { users: users },
+        receiver_id: chat.receiver_id,
+        message: chat.message,
     };
 }

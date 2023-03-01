@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
-import { User } from "./interface/user_interface";
+import { IUser } from "./interface/user_interface";
 import { GraphQLError } from "graphql";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { CustomErrorMessage } from "./error/error";
@@ -26,7 +26,7 @@ export const RequestContext = {
 };
 
 export const Token = {
-    generate_access_token: async (user: User) => {
+    generate_access_token: async (user: IUser) => {
         return await jsonwebtoken.sign(
             { id: user.id },
             process.env.ACCESS_TOKEN_SECRET as string,
@@ -35,7 +35,7 @@ export const Token = {
             }
         );
     },
-    generate_refresh_token: async (user: User) => {
+    generate_refresh_token: async (user: IUser) => {
         return await jsonwebtoken.sign(
             { id: user.id },
             process.env.REFRESH_TOKEN_SECRET as string,

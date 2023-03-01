@@ -1,10 +1,10 @@
-import { User } from "../../../helpers/interface/user_interface";
+import { IUser } from "../../../helpers/interface/user_interface";
 import { compare_role } from "../../../helpers/validator/user_management/role";
 
 export class User_management {
-    _user: User;
+    _user: IUser;
 
-    constructor(user: User) {
+    constructor(user: IUser) {
         this._user = user;
     }
 
@@ -12,7 +12,7 @@ export class User_management {
         return this._user;
     }
 
-    set user(user: User) {
+    set user(user: IUser) {
         this._user = user;
     }
 

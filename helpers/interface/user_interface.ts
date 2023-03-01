@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
     id?: string;
     email: string;
     username: string;
@@ -7,14 +7,14 @@ export interface User {
 }
 
 export interface JWT {
-  header: {
-    alg: string;
-    typ: string;
-  };
-  payload: {
-    id: string;
-    iat: number;
-    exp: number;
-  };
-  signature: string;
+    header: {
+        alg: string;
+        typ: string;
+    };
+    payload: {
+        id: string;
+        iat: number;
+        exp: number;
+    };
+    signature: string;
 }

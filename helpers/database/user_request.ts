@@ -1,7 +1,7 @@
 import { GraphQLError } from "graphql";
 import { user_model } from "../models/user_model";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { User } from "../interface/user_interface";
+import { IUser } from "../interface/user_interface";
 import { CustomErrorMessage } from "../error/error";
 
 export async function find_user(filter: object) {
@@ -9,7 +9,7 @@ export async function find_user(filter: object) {
     return res;
 }
 
-export async function find_user_with_email(user: User) {
+export async function find_user_with_email(user: IUser) {
     const res = await user_model.findOne({ email: user.email }).clone();
     if (res == null) {
         throw new GraphQLError(CustomErrorMessage.NO_USER, {
@@ -23,7 +23,7 @@ export async function find_user_with_email(user: User) {
     return res;
 }
 
-export async function find_user_with_id(user: User) {
+export async function find_user_with_id(user: IUser) {
     const res = await user_model.findOne({ _id: user.id }).clone();
     if (res == null) {
         throw new GraphQLError(CustomErrorMessage.NO_USER_WITH_ID, {

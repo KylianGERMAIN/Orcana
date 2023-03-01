@@ -7,7 +7,10 @@ const chat_response = `#graphql
 
     type chat {
       messages: String
+      receiver_id: String
       sender_id: String
+      date: String
+      id: String
     }
 
     type get_chat_response {
@@ -27,7 +30,7 @@ const chat_mutation = `#graphql
 
 const chat_query = `#graphql
     type Query {
-        get_chats:get_chat_response
+        get_chat:get_chat_response
     }
 `;
 

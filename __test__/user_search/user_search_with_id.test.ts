@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { User } from "../../helpers/interface/user_interface";
+import { IUser } from "../../helpers/interface/user_interface";
 
 import dotenv from "dotenv";
 import fetch from "node-fetch";
@@ -24,7 +24,7 @@ dotenv.config({ path: `.env.test` });
 
 describe("find user", () => {
     test("Success", () => {
-        const user: User = {
+        const user: IUser = {
             id: "63999a2510ab31370e484650",
             email: "",
             username: "",
@@ -55,7 +55,7 @@ describe("find user", () => {
     });
 
     test("Error", () => {
-        const user: User = {
+        const user: IUser = {
             id: "63999a2510ab31370e484651",
             email: "",
             username: "",

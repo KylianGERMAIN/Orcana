@@ -1,13 +1,13 @@
 import { Encrypt, RequestContext, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/error_interface";
-import { User } from "../../helpers/interface/user_interface";
+import { IUser } from "../../helpers/interface/user_interface";
 import { user_model } from "../../helpers/models/user_model";
 import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
 import { Authentification } from "./authentification_class/authentification";
 import { Database } from "../../helpers/database/database";
 
 export async function register(
-    { email, username, password }: User,
+    { email, username, password }: IUser,
     context: any
 ) {
     let _error: ErrorResponse = {
@@ -18,7 +18,7 @@ export async function register(
             field: "",
         },
     };
-    const user: User = {
+    const user: IUser = {
         email: email,
         username: username,
         password: password,

@@ -2,19 +2,19 @@ import { Database } from "../../helpers/database/database";
 import { update_user } from "../../helpers/database/user_request";
 import { ErrorResponse } from "../../helpers/interface/error_interface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
-import { JWT, User } from "../../helpers/interface/user_interface";
+import { JWT, IUser } from "../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../helpers/utils";
 import { User_management } from "./user_management_class/user_management";
 
 export async function set_role(context: any, id: string, role: string) {
-    const user: User = {
+    const user: IUser = {
         email: "",
         username: "",
         password: "",
         role: "",
         id: "",
     };
-    const toUser: User = {
+    const toUser: IUser = {
         email: "",
         username: "",
         password: "",

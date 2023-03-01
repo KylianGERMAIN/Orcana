@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql";
 import { ErrorResponse } from "../../helpers/interface/error_interface";
-import { JWT, User } from "../../helpers/interface/user_interface";
+import { JWT, IUser } from "../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../helpers/utils";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
@@ -9,7 +9,7 @@ import { Authentification } from "../authentification/authentification_class/aut
 import { Database } from "../../helpers/database/database";
 
 export async function set_username(context: any, name: string) {
-    const user: User = {
+    const user: IUser = {
         email: "",
         username: name,
         password: "",

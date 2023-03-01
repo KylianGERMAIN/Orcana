@@ -2,7 +2,7 @@ import { GraphQLError } from "graphql";
 import { ReasonPhrases } from "http-status-codes/build/cjs/reason-phrases";
 import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
 import { ErrorResponse } from "../../helpers/interface/error_interface";
-import { JWT, User } from "../../helpers/interface/user_interface";
+import { JWT, IUser } from "../../helpers/interface/user_interface";
 import { Encrypt, RequestContext, Token } from "../../helpers/utils";
 import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
 import { CustomErrorMessage } from "../../helpers/error/error";
@@ -10,7 +10,7 @@ import { Authentification } from "../authentification/authentification_class/aut
 import { Database } from "../../helpers/database/database";
 
 export async function reset_password(context: any, newPassword: string) {
-    const user: User = {
+    const user: IUser = {
         email: "",
         username: "",
         password: "",

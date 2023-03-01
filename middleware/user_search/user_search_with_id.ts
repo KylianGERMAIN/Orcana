@@ -1,11 +1,11 @@
 import { ErrorResponse } from "../../helpers/interface/error_interface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
-import { JWT, User } from "../../helpers/interface/user_interface";
+import { JWT, IUser } from "../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../helpers/utils";
 import { Database } from "../../helpers/database/database";
 
 export async function user_search_with_id(context: any, user_id: string) {
-    const user: User = {
+    const user: IUser = {
         email: "",
         username: "",
         password: "",

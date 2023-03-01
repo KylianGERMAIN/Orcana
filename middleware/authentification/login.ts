@@ -1,6 +1,6 @@
 import { RequestContext, Token } from "../../helpers/utils";
 import { ErrorResponse } from "../../helpers/interface/error_interface";
-import { User } from "../../helpers/interface/user_interface";
+import { IUser } from "../../helpers/interface/user_interface";
 import { HttpInfo, QueryContent } from "../../helpers/interface/log_interface";
 import { Authentification } from "./authentification_class/authentification";
 import { Database } from "../../helpers/database/database";
@@ -15,7 +15,7 @@ export async function login(email: string, password: string, context: any) {
         },
     };
 
-    const user: User = {
+    const user: IUser = {
         email: email,
         username: "",
         password: password,

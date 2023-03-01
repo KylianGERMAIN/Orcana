@@ -1,14 +1,14 @@
 import { User_search } from "./user_search";
-import { User } from "../../../helpers/interface/user_interface";
+import { IUser } from "../../../helpers/interface/user_interface";
 import { Database } from "../../../helpers/database/database";
 
 export async function search_user(this: User_search, filtrer: any) {
-    const users: User[] = [];
+    const users: IUser[] = [];
     const db = new Database();
 
     const result = await db.find_user(filtrer);
     for (let i = 0; i != result.length; i++) {
-        const user_data: User = {
+        const user_data: IUser = {
             email: result[i].email,
             username: result[i].username,
             password: "",
