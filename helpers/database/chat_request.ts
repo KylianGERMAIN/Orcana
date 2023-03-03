@@ -1,3 +1,6 @@
+import { GraphQLError } from "graphql";
+import { StatusCodes, ReasonPhrases } from "http-status-codes";
+import { CustomErrorMessage } from "../error/error";
 import { IChat } from "../interface/chat_interface";
 import { chat_model } from "../models/chat_model";
 
@@ -9,9 +12,10 @@ export async function create_chat(chat: IChat) {
         message: chat.message,
     });
     await log.save();
+    return log;
 }
 
-export async function get_chat(_receiver_id: any) {
+export async function get_chat(_receiver_id: string) {
     const chats: IChat[] = [];
 
     const res = await chat_model
@@ -29,4 +33,23 @@ export async function get_chat(_receiver_id: any) {
         chats.push(chat);
     }
     return chats;
+}
+
+export async function delete_chat(_sender_id: string, _id: string) {
+    await chat_model
+        .deleteOne({ _id: _id }, function (err: any) {
+            console.log(err);
+            if (err) {
+                throw new GraphQLError(
+                    CustomErrorMessage.DELETE_CHAT_DATABASE,
+                    {
+                        extensions: {
+                            status: StatusCodes.INTERNAL_SERVER_ERROR,
+                            error: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                        },
+                    }
+                );
+            }
+        })
+        .clone();
 }

@@ -2,11 +2,20 @@ const chat_response = `#graphql
     type create_chat_response {
         receiver_id: String
         message: String
+        id: String
+        error: Error
+    }
+
+    type delete_chat_response {
+        receiver_id: String
+        message: String
+        date: String
+        id: String
         error: Error
     }
 
     type chat {
-      messages: String
+      message: String
       receiver_id: String
       sender_id: String
       date: String
@@ -25,6 +34,9 @@ const chat_mutation = `#graphql
       receiver_id: String
       message: String
     ): create_chat_response
+    delete_chat(
+      id: String
+    ): basic_response
   }
 `;
 

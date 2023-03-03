@@ -34,7 +34,7 @@ const authentification_mutation = `#graphql
 `;
 
 export const authentification = [
-  authentification_response,
-  authentification_query,
-  authentification_mutation,
+    authentification_response,
+    authentification_query,
+    authentification_mutation,
 ];

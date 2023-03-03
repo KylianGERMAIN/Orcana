@@ -1,4 +1,4 @@
-import { create_chat, get_chat } from "./chat_request";
+import { create_chat, delete_chat, get_chat } from "./chat_request";
 import { set_log } from "./log_request";
 import {
     delete_user,
@@ -20,6 +20,7 @@ export class Database {
 
     // delete //
     public delete_user = delete_user;
+    public delete_chat = delete_chat;
 
     // set //
     public set_log = set_log;

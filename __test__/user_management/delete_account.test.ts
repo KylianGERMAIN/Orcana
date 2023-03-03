@@ -27,7 +27,7 @@ const clean = `query delete_account {
 dotenv.config({ path: `.env.test` });
 
 describe("deleteAccount", () => {
-    test("Success", () => {
+    test("Success", async () => {
         const user: IUser = {
             id: "",
             email: "test@hotmail.com",
@@ -36,7 +36,7 @@ describe("deleteAccount", () => {
             role: "",
         };
 
-        return fetch("http://localhost:4000/graphql", {
+        let res: any = await fetch("http://localhost:4000/graphql", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,29 +50,25 @@ describe("deleteAccount", () => {
                 },
                 operationName: "register",
             }),
+        });
+        res = await res.json();
+        fetch("http://localhost:4000/graphql", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${res.data.register.access_token}`,
+            },
+            body: JSON.stringify({
+                query: clean,
+                operationName: "delete_account",
+            }),
         })
             .then((res: any) => {
+                expect(res.status).toEqual(200);
                 return res.json();
             })
             .then((res: any) => {
-                fetch("http://localhost:4000/graphql", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${res.data.register.access_token}`,
-                    },
-                    body: JSON.stringify({
-                        query: clean,
-                        operationName: "delete_account",
-                    }),
-                })
-                    .then((res: any) => {
-                        expect(res.status).toEqual(200);
-                        return res.json();
-                    })
-                    .then((res: any) => {
-                        expect(res.errors).toBe(undefined);
-                    });
+                expect(res.errors).toBe(undefined);
             });
     });
 
