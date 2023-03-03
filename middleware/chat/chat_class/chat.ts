@@ -1,5 +1,5 @@
 import { IChat } from "../../../helpers/interface/chat_interface";
-import { empty_chat } from "./empty_chat";
+import { empty_chat } from "./function_chat";
 
 export class Chat {
     _chat: IChat;

@@ -98,4 +98,31 @@ describe("create_chat", () => {
                 );
             });
     });
+
+    test("No receiver", () => {
+        return fetch("http://localhost:4000/graphql", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.ACCESS_TOKEN_LOGIN_TEST}`,
+            },
+            body: JSON.stringify({
+                query: mutation,
+                variables: {
+                    receiverId: "63999a2510ab31370e484659",
+                    message: "Ce message ne sera jamais envoyé",
+                },
+                operationName: "create_chat",
+            }),
+        })
+            .then((res: any) => {
+                expect(res.status).toEqual(200);
+                return res.json();
+            })
+            .then((res: any) => {
+                expect(res.errors[0].message).toBe(
+                    CustomErrorMessage.NO_USER_WITH_ID
+                );
+            });
+    });
 });

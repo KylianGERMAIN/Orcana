@@ -1,5 +1,4 @@
-import { find_logs } from "./find_logs";
-import { find_logs_with_date } from "./find_logs_with_date";
+import { find_logs, find_logs_with_date } from "./find_logs";
 
 export class Log {
     private log_length = 0;

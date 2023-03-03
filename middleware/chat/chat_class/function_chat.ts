@@ -13,3 +13,5 @@ export async function empty_chat(chat: IChat) {
         });
     }
 }
+
+// export async function only_sender_can_remove(chat: IChat) {}

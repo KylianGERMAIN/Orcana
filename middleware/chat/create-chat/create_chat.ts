@@ -54,6 +54,12 @@ export async function create_chat(
         if (token) {
             chat_class._chat.sender_id = token.payload.id;
             await chat_class.empty_chat(chat_class._chat);
+            await db.find_user_with_id({
+                id: chat_class._chat.receiver_id,
+                email: "",
+                username: "",
+                password: "",
+            });
             chat_class._chat.id = (
                 await db.create_chat(chat_class._chat)
             )._id.toString();
