@@ -38,7 +38,6 @@ export async function get_chat(_receiver_id: string) {
 export async function delete_chat(_sender_id: string, _id: string) {
     await chat_model
         .deleteOne({ _id: _id }, function (err: any) {
-            console.log(err);
             if (err) {
                 throw new GraphQLError(
                     CustomErrorMessage.DELETE_CHAT_DATABASE,

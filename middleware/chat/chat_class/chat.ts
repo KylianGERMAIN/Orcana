@@ -1,5 +1,9 @@
 import { IChat } from "../../../helpers/interface/chat_interface";
-import { empty_chat } from "./function_chat";
+import {
+    check_chat_exist,
+    empty_chat,
+    only_sender_can_remove,
+} from "./function_chat";
 
 export class Chat {
     _chat: IChat;
@@ -10,4 +14,6 @@ export class Chat {
     }
 
     public empty_chat = empty_chat;
+    public only_sender_can_remove = only_sender_can_remove;
+    public check_chat_exist = check_chat_exist;
 }

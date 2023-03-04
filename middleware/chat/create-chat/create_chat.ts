@@ -53,7 +53,7 @@ export async function create_chat(
         )) as unknown as JWT;
         if (token) {
             chat_class._chat.sender_id = token.payload.id;
-            await chat_class.empty_chat(chat_class._chat);
+            await chat_class.empty_chat();
             await db.find_user_with_id({
                 id: chat_class._chat.receiver_id,
                 email: "",

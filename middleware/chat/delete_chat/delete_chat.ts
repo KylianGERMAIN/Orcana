@@ -49,6 +49,8 @@ export async function delete_chat(id: string, context: any) {
         )) as unknown as JWT;
         if (token) {
             chat_class._chat.sender_id = token.payload.id;
+            const chat_found = await chat_class.check_chat_exist();
+            await chat_class.only_sender_can_remove(chat_found);
             await db.delete_chat(
                 chat_class._chat.sender_id,
                 chat_class._chat.id || ""

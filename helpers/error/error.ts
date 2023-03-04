@@ -32,4 +32,6 @@ export enum CustomErrorMessage {
 
     /**     Chat     **/
     CHAT_EMPTY = "The chat message is empty",
+    REMOVE_A_CHAT_THAT_DOESNT_EXIST = "the message you are trying to delete does not exist",
+    NOT_YOUR_CHAT = "you are not the sender of the message",
 }
