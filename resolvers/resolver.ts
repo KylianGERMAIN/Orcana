@@ -8,15 +8,14 @@ import {
 } from "./user_management";
 import { user_search_mutation, user_search_query } from "./user_search";
 
-import { PubSub } from "graphql-subscriptions";
+import { PubSub, withFilter } from "graphql-subscriptions";
+import { Token } from "../helpers/utils";
+import { JWT } from "../helpers/interface/user_interface";
 export const pubsub = new PubSub();
 
 export const resolvers = {
     Query: {
         default_post: () => "Welcome to Orcana !",
-        currentNumber() {
-            return 0;
-        },
 
         ...auth_query,
         ...user_management_query,
@@ -32,20 +31,25 @@ export const resolvers = {
         ...chat_mutation,
     },
     Subscription: {
-        numberIncremented: {
-            subscribe: () => pubsub.asyncIterator(["NUMBER_INCREMENTED"]),
+        chat_subscription: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator("CHAT_CREATED"),
+                async (payload: any, variables: any, context: any) => {
+                    if (context.connectionParams) {
+                        const token: JWT = (await Token.decode_token(
+                            await context.connectionParams.authorization,
+                            process.env.ACCESS_TOKEN_SECRET as string
+                        )) as unknown as JWT;
+                        if (
+                            token.payload.id ==
+                            payload.chat_subscription.receiver_id
+                        ) {
+                            return true;
+                        }
+                    }
+                    return payload;
+                }
+            ),
         },
     },
 };
-
-let currentNumber = 0;
-function incrementNumber() {
-    currentNumber++;
-    pubsub.publish("NUMBER_INCREMENTED", {
-        numberIncremented: currentNumber,
-    });
-    setTimeout(incrementNumber, 100);
-}
-
-// Start incrementing
-incrementNumber();

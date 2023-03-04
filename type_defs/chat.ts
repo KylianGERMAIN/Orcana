@@ -46,10 +46,15 @@ const chat_query = `#graphql
     }
 `;
 
-// const statistic_subscription = `#graphql
-//   type Subscription {
-//     numberIncremented: Int
-//   }
-// `;
+const chat_subscription = `#graphql
+  type Subscription {
+    chat_subscription: chat
+  }
+`;
 
-export const chat = [chat_response, chat_mutation, chat_query];
+export const chat = [
+    chat_response,
+    chat_mutation,
+    chat_query,
+    chat_subscription,
+];

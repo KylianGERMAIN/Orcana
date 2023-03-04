@@ -5,18 +5,7 @@ import { statistic } from "./statistic_def";
 import { user_search } from "./user_search_def";
 import { chat } from "./chat";
 
-const bruh = `#graphql
-      type Query {
-        currentNumber: Int
-      }
-
-      type Subscription {
-        numberIncremented: Int
-      }
-    `;
-
 export const typeDefs = [
-    bruh,
     Basic,
     authentification,
     user_management,

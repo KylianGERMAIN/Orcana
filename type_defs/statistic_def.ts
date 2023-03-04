@@ -17,14 +17,4 @@ const statistic_mutation = `#graphql
   }
 `;
 
-const statistic_subscription = `#graphql
-  type Subscription {
-    numberIncremented: Int
-  }
-`;
-
-export const statistic = [
-    statistic_response,
-    statistic_mutation,
-    statistic_subscription,
-];
+export const statistic = [statistic_response, statistic_mutation];

@@ -7,6 +7,7 @@ import { JWT } from "../../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../../helpers/utils";
 import { Database } from "../../../helpers/database/database";
 import { Chat } from "../chat_class/chat";
+import { pubsub } from "../../../resolvers/resolver";
 
 export async function create_chat(
     receiver_id: string,
@@ -40,6 +41,7 @@ export async function create_chat(
     const db = new Database();
     const chat_class = new Chat({
         sender_id: "",
+        date: "",
         receiver_id: receiver_id,
         message: message,
         id: "",
@@ -63,6 +65,10 @@ export async function create_chat(
             chat_class._chat.id = (
                 await db.create_chat(chat_class._chat)
             )._id.toString();
+
+            pubsub.publish("CHAT_CREATED", {
+                chat_subscription: chat_class._chat,
+            });
             db.set_log(
                 time,
                 chat_class._chat.sender_id,

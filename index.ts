@@ -13,6 +13,8 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import { expressMiddleware } from "@apollo/server/express4";
 import cors from "cors";
 import bodyParser from "body-parser";
+import { Token } from "./helpers/utils";
+import { JWT } from "./helpers/interface/user_interface";
 
 dotenv.config();
 
@@ -38,7 +40,27 @@ async function main() {
         server: httpServer,
         path: "/graphql",
     });
-    const serverCleanup = useServer({ schema }, wsServer);
+    const serverCleanup = useServer(
+        {
+            schema,
+            onConnect: async (context: any) => {
+                if (context.connectionParams) {
+                    const token: JWT = (await Token.decode_token(
+                        await context.connectionParams.authorization,
+                        process.env.ACCESS_TOKEN_SECRET as string
+                    )) as unknown as JWT;
+                }
+            },
+            context: async (ctx) => {
+                // This will be run every time the client sends a subscription request
+                return ctx;
+            },
+            onDisconnect(ctx, code, reason) {
+                console.log("Disconnected!");
+            },
+        },
+        wsServer
+    );
 
     const server = new ApolloServer({
         schema,
