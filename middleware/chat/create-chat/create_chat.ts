@@ -62,10 +62,7 @@ export async function create_chat(
                 username: "",
                 password: "",
             });
-            chat_class._chat.id = (
-                await db.create_chat(chat_class._chat)
-            )._id.toString();
-
+            chat_class._chat = await db.create_chat(chat_class._chat);
             pubsub.publish("CHAT_CREATED", {
                 chat_subscription: chat_class._chat,
             });

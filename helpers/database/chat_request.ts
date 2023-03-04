@@ -12,7 +12,14 @@ export async function create_chat(chat: IChat) {
         message: chat.message,
     });
     await log.save();
-    return log;
+    const res_chat: IChat = {
+        sender_id: log.sender_id,
+        date: log.timestamp,
+        receiver_id: log.receiver_id || "",
+        message: log.message || "",
+        id: log.id,
+    };
+    return res_chat;
 }
 
 export async function get_chat(_receiver_id: string) {
