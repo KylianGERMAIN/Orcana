@@ -2,6 +2,7 @@ import { IChat } from "../helpers/interface/chat_interface";
 import { create_chat } from "../middleware/chat/create-chat/create_chat";
 import { delete_chat } from "../middleware/chat/delete_chat/delete_chat";
 import { get_chat } from "../middleware/chat/get_chat/get_chat";
+import { get_all_chat } from "../middleware/chat/get_chat/get_all_chat";
 
 export const chat_mutation = {
     create_chat: async (
@@ -17,7 +18,7 @@ export const chat_mutation = {
         get_chat(context, page),
 };
 
-// export const chat_query = {
-//     get_chat: async (parent: never, values: never, context: any) =>
-//         get_chat(context),
-// };
+export const chat_query = {
+    get_all_chat: async (parent: never, values: never, context: any) =>
+        get_all_chat(context),
+};

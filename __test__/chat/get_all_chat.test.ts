@@ -3,8 +3,8 @@ import { describe, expect, test } from "@jest/globals";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
-const query = `query get_chat {
-    get_chat {
+const query = `query get_all_chat {
+    get_all_chat {
       chats {
         message
         receiver_id
@@ -20,7 +20,7 @@ const query = `query get_chat {
 
 dotenv.config({ path: `.env.test` });
 
-describe("get_chat", () => {
+describe("get_all_chat", () => {
     test("Success", () => {
         return fetch("http://localhost:4000/graphql", {
             method: "POST",
@@ -30,7 +30,7 @@ describe("get_chat", () => {
             },
             body: JSON.stringify({
                 query: query,
-                operationName: "get_chat",
+                operationName: "get_all_chat",
             }),
         })
             .then((res: any) => {
@@ -38,7 +38,7 @@ describe("get_chat", () => {
                 return res.json();
             })
             .then((res: any) => {
-                expect(Array.isArray([res.data.get_chat.chats])).toBe(true);
+                expect(Array.isArray([res.data.get_all_chat.chats])).toBe(true);
                 expect(res.errors).toBe(undefined);
             });
     });
@@ -52,7 +52,7 @@ describe("get_chat", () => {
             },
             body: JSON.stringify({
                 query: query,
-                operationName: "get_chat",
+                operationName: "get_all_chat",
             }),
         })
             .then((res: any) => {
