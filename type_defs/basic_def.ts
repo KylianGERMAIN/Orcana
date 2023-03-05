@@ -6,6 +6,13 @@ const basic_response = `#graphql
   type basic_response {
     error: Error
   }
+
+  type pagination {
+    page: Int
+    page_size: Int
+    page_count: Int
+    total: Int
+  }
 `;
 
 const basic_query = `#graphql

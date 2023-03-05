@@ -7,8 +7,9 @@ import { JWT } from "../../../helpers/interface/user_interface";
 import { RequestContext, Token } from "../../../helpers/utils";
 import { Database } from "../../../helpers/database/database";
 import { Chat } from "../chat_class/chat";
+import { chat_model } from "../../../helpers/models/chat_model";
 
-export async function get_chat(context: any) {
+export async function get_chat(context: any, _page: number) {
     let _error: ErrorResponse = {
         message: "",
         extensions: {
@@ -32,6 +33,7 @@ export async function get_chat(context: any) {
         query: context.body.query ? context.body.query : "",
     };
 
+    let _total = 0;
     const time = new Date();
     const db = new Database();
     const chat_class = new Chat({
@@ -48,8 +50,13 @@ export async function get_chat(context: any) {
             process.env.ACCESS_TOKEN_SECRET as string
         )) as unknown as JWT;
         if (token) {
+            await chat_class.pagination_sup_zero(_page);
             chat_class._chat.sender_id = token.payload.id;
-            chat_class._chats = await db.get_chat(token.payload.id);
+            chat_class._chats = await db.get_chat(token.payload.id, _page);
+            _total = await chat_model.count({
+                receiver_id: token.payload.id,
+            });
+            console.log(_total);
             db.set_log(
                 time,
                 chat_class._chat.sender_id,
@@ -73,5 +80,11 @@ export async function get_chat(context: any) {
     return {
         error: _error,
         chats: chat_class._chats,
+        pagination: {
+            page: _page,
+            page_size: chat_class._chats.length,
+            page_count: Math.ceil(_total / 100),
+            total: _total,
+        },
     };
 }

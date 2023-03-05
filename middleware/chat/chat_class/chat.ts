@@ -3,6 +3,7 @@ import {
     check_chat_exist,
     empty_chat,
     only_sender_can_remove,
+    pagination_sup_zero,
 } from "./function_chat";
 
 export class Chat {
@@ -16,4 +17,5 @@ export class Chat {
     public empty_chat = empty_chat;
     public only_sender_can_remove = only_sender_can_remove;
     public check_chat_exist = check_chat_exist;
+    public pagination_sup_zero = pagination_sup_zero;
 }

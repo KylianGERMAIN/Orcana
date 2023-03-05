@@ -1,6 +1,6 @@
 // import { pubsub } from "..";
 import { auth_mutation, auth_query } from "./authentification";
-import { chat_mutation, chat_query } from "./chat";
+import { chat_mutation } from "./chat";
 import { statistic_mutation, statistic_query } from "./statistic";
 import {
     user_management_mutation,
@@ -21,7 +21,7 @@ export const resolvers = {
         ...user_management_query,
         ...statistic_query,
         ...user_search_query,
-        ...chat_query,
+        // ...chat_query,
     },
     Mutation: {
         ...auth_mutation,

@@ -22,9 +22,11 @@ const chat_response = `#graphql
       id: String
     }
 
+    
     type get_chat_response {
       chats: [chat]
       error: Error
+      pagination: pagination
     }
 `;
 
@@ -37,14 +39,15 @@ const chat_mutation = `#graphql
     delete_chat(
       id: String
     ): basic_response
+    get_chat(page: Int):get_chat_response
   }
 `;
 
-const chat_query = `#graphql
-    type Query {
-        get_chat:get_chat_response
-    }
-`;
+// const chat_query = `#graphql
+//     type Query {
+//         get_chat:get_chat_response
+//     }
+// `;
 
 const chat_subscription = `#graphql
   type Subscription {
@@ -55,6 +58,6 @@ const chat_subscription = `#graphql
 export const chat = [
     chat_response,
     chat_mutation,
-    chat_query,
+    // chat_query,
     chat_subscription,
 ];

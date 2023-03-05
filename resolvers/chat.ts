@@ -12,9 +12,12 @@ export const chat_mutation = {
 
     delete_chat: async (parent: never, { id }: any, context: any) =>
         delete_chat(id, context),
+
+    get_chat: async (parent: never, { page }: never, context: any) =>
+        get_chat(context, page),
 };
 
-export const chat_query = {
-    get_chat: async (parent: never, values: never, context: any) =>
-        get_chat(context),
-};
+// export const chat_query = {
+//     get_chat: async (parent: never, values: never, context: any) =>
+//         get_chat(context),
+// };

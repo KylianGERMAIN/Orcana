@@ -41,3 +41,14 @@ export async function only_sender_can_remove(this: Chat, chat: any) {
         });
     }
 }
+
+export async function pagination_sup_zero(page: number) {
+    if (page <= 0) {
+        throw new GraphQLError(CustomErrorMessage.PAGINATION_CHAT, {
+            extensions: {
+                status: StatusCodes.FORBIDDEN,
+                error: ReasonPhrases.FORBIDDEN,
+            },
+        });
+    }
+}

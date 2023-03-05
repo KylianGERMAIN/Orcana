@@ -22,12 +22,13 @@ export async function create_chat(chat: IChat) {
     return res_chat;
 }
 
-export async function get_chat(_receiver_id: string) {
+export async function get_chat(_receiver_id: string, page: number) {
     const chats: IChat[] = [];
-
     const res = await chat_model
         .find({ receiver_id: _receiver_id })
         .sort({ timestamp: -1 })
+        .skip(3 * (page - 1))
+        .limit(3)
         .clone();
     for (let i = 0; i != res.length; i++) {
         const chat: IChat = {
