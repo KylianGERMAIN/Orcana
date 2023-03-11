@@ -1,4 +1,3 @@
-// import { pubsub } from "..";
 import { auth_mutation, auth_query } from "./authentification";
 import { chat_mutation, chat_query } from "./chat";
 import { statistic_mutation, statistic_query } from "./statistic";

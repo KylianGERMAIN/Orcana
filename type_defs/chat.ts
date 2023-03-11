@@ -44,7 +44,7 @@ const chat_mutation = `#graphql
     delete_chat(
       id: String
     ): basic_response
-    get_chat(page: Int):get_chat_response
+    get_chat(page: Int, width: String):get_chat_response
   }
 `;
 

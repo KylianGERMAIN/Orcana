@@ -25,7 +25,9 @@ export async function create_chat(chat: IChat) {
 export async function get_chat(_receiver_id: string, page: number) {
     const chats: IChat[] = [];
     const res = await chat_model
-        .find({ receiver_id: _receiver_id })
+        .find({
+            $or: [{ receiver_id: _receiver_id }, { sender_id: _receiver_id }],
+        })
         .sort({ timestamp: -1 })
         .skip(100 * (page - 1))
         .limit(100)
@@ -33,7 +35,37 @@ export async function get_chat(_receiver_id: string, page: number) {
     for (let i = 0; i != res.length; i++) {
         const chat: IChat = {
             message: res[i].message || "",
-            receiver_id: _receiver_id,
+            receiver_id: res[i].receiver_id || "",
+            sender_id: res[i].sender_id || "",
+            date: res[i].timestamp || "",
+            id: res[i].id || "",
+        };
+        chats.push(chat);
+    }
+    return chats;
+}
+
+export async function get_chat_only_with(
+    _receiver_id: string,
+    page: number,
+    _width: string
+) {
+    const chats: IChat[] = [];
+    const res = await chat_model
+        .find({
+            $or: [
+                { receiver_id: _receiver_id, sender_id: _width },
+                { receiver_id: _width, sender_id: _receiver_id },
+            ],
+        })
+        .sort({ timestamp: -1 })
+        .skip(100 * (page - 1))
+        .limit(100)
+        .clone();
+    for (let i = 0; i != res.length; i++) {
+        const chat: IChat = {
+            message: res[i].message || "",
+            receiver_id: res[i].receiver_id || "",
             sender_id: res[i].sender_id || "",
             date: res[i].timestamp || "",
             id: res[i].id || "",
@@ -46,13 +78,15 @@ export async function get_chat(_receiver_id: string, page: number) {
 export async function get_all_chat(_receiver_id: string) {
     const chats: IChat[] = [];
     const res = await chat_model
-        .find({ receiver_id: _receiver_id })
+        .find({
+            $or: [{ receiver_id: _receiver_id }, { sender_id: _receiver_id }],
+        })
         .sort({ timestamp: -1 })
         .clone();
     for (let i = 0; i != res.length; i++) {
         const chat: IChat = {
             message: res[i].message || "",
-            receiver_id: _receiver_id,
+            receiver_id: res[i].receiver_id || "",
             sender_id: res[i].sender_id || "",
             date: res[i].timestamp || "",
             id: res[i].id || "",

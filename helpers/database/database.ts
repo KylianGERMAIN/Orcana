@@ -3,6 +3,7 @@ import {
     delete_chat,
     get_all_chat,
     get_chat,
+    get_chat_only_with,
 } from "./chat_request";
 import { set_log } from "./log_request";
 import {
@@ -20,6 +21,7 @@ export class Database {
 
     public get_chat = get_chat;
     public get_all_chat = get_all_chat;
+    public get_chat_only_with = get_chat_only_with;
 
     // update //
     public update_user = update_user;

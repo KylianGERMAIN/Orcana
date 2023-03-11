@@ -14,8 +14,8 @@ export const chat_mutation = {
     delete_chat: async (parent: never, { id }: any, context: any) =>
         delete_chat(id, context),
 
-    get_chat: async (parent: never, { page }: never, context: any) =>
-        get_chat(context, page),
+    get_chat: async (parent: never, { page, width }: never, context: any) =>
+        get_chat(context, page, width),
 };
 
 export const chat_query = {

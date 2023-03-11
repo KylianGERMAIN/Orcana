@@ -9,7 +9,7 @@ import { Database } from "../../../helpers/database/database";
 import { Chat } from "../chat_class/chat";
 import { chat_model } from "../../../helpers/models/chat_model";
 
-export async function get_chat(context: any, _page: number) {
+export async function get_chat(context: any, _page: number, _width: string) {
     let _error: ErrorResponse = {
         message: "",
         extensions: {
@@ -52,11 +52,25 @@ export async function get_chat(context: any, _page: number) {
         if (token) {
             await chat_class.pagination_sup_zero(_page);
             chat_class._chat.sender_id = token.payload.id;
-            chat_class._chats = await db.get_chat(token.payload.id, _page);
-            _total = await chat_model.count({
-                receiver_id: token.payload.id,
-            });
-            console.log(_total);
+            if (_page && _width) {
+                chat_class._chats = await db.get_chat_only_with(
+                    token.payload.id,
+                    _page,
+                    _width
+                );
+                _total = await chat_model.count({
+                    $or: [
+                        { receiver_id: token.payload.id, sender_id: _width },
+                        { receiver_id: _width, sender_id: token.payload.id },
+                    ],
+                });
+            } else {
+                chat_class._chats = await db.get_chat(token.payload.id, _page);
+                _total = await chat_model.count({
+                    receiver_id: token.payload.id,
+                });
+            }
+
             db.set_log(
                 time,
                 chat_class._chat.sender_id,
