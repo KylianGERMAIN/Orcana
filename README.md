@@ -9,6 +9,21 @@
 
 ### Orcana is a GraphQL API admin panel
 
+With Orcana you can have an administrator panel and observe through log and statistics different things like:
+
+- Create an account
+- Connect to an account
+- Security with an json web token
+- search an user by name
+- Search an user by id
+- Reset your password
+- Change your name
+- Delete your account
+- Change the role of a user if the user has a role below yours
+- You can send a message to another user
+- Delete your message
+- Get in real time the message sent
+
 # Installation
 
 To get started, just clone the repository and run yarn install && yarn dev:
